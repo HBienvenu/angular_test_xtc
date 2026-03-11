@@ -1,0 +1,384 @@
+<!-- Custom Cursor -->
+<div class="cursor" #cursor></div>
+<div class="cursor-dot" #cursorDot></div>
+
+<!-- ========== NAVBAR ========== -->
+<nav class="navbar" #navEl>
+  <div class="nav-inner">
+    <a class="nav-logo" (click)="scrollTo('#hero')">
+      <span class="logo-icon">▶</span>
+      <span class="logo-text">TIKTOK<span class="logo-accent">STORM</span></span>
+    </a>
+
+    <ul class="nav-links">
+      @for (link of navLinks; track link.label) {
+        <li>
+          <a class="nav-link" (click)="scrollTo(link.href)">{{ link.label }}</a>
+        </li>
+      }
+    </ul>
+
+    <a class="nav-cta" (click)="scrollTo('#contact')">Démarrer →</a>
+
+    <button class="burger" (click)="toggleMenu()" [class.open]="menuOpen">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" [class.open]="menuOpen">
+  <button class="close-menu" (click)="toggleMenu()">✕</button>
+  @for (link of navLinks; track link.label) {
+    <a (click)="scrollTo(link.href)">{{ link.label }}</a>
+  }
+  <a class="mobile-cta" (click)="scrollTo('#contact')">Démarrer le projet →</a>
+</div>
+
+<!-- ========== HERO ========== -->
+<section class="hero-section" id="hero">
+  <!-- Background grid dots -->
+  <div class="grid-bg">
+    @for (
+      i of [
+        1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25,
+        26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48,
+        49, 50,
+      ];
+      track i
+    ) {
+      <span class="grid-dot"></span>
+    }
+  </div>
+
+  <!-- Neon Orbs -->
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <div class="hero-inner">
+    <div class="hero-content">
+      <div class="hero-badge" data-aos="fade-right" data-aos-delay="200">
+        <span class="badge-dot"></span>
+        Agence #1 TikTok en France 🇫🇷
+      </div>
+
+      <h1 class="hero-title">On rend votre marque VIRALE</h1>
+
+      <p class="hero-subtitle">
+        Contenus TikTok qui explosent l'algorithme.<br />
+        Stratégie, création &amp; performance réunis.
+      </p>
+
+      <div class="hero-cta">
+        <button class="cta-btn-primary" (click)="scrollTo('#contact')">
+          <span>Booster ma marque</span>
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M5 12h14M12 5l7 7-7 7" />
+          </svg>
+        </button>
+        <button class="cta-btn-secondary" (click)="scrollTo('#works')">
+          Voir nos réalisations
+        </button>
+      </div>
+
+      <div class="hero-trust">
+        <span>Ils nous font confiance :</span>
+        <div class="trust-logos">
+          <span>ZARA</span>
+          <span>L'ORÉAL</span>
+          <span>NIKE</span>
+          <span>SEPHORA</span>
+          <span>DÉCATHLON</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Phone Mockup -->
+    <div class="phone-mockup-wrapper">
+      <div class="phone-mockup">
+        <div class="phone-screen">
+          <div class="tiktok-ui">
+            <div class="tiktok-video-bg"></div>
+            <div class="tiktok-overlay">
+              <div class="tiktok-user">
+                <div class="user-avatar">🎬</div>
+                <div>
+                  <div class="user-name">&#64;votre_marque</div>
+                  <div class="user-follow">Suivre</div>
+                </div>
+              </div>
+              <div class="tiktok-desc">Ce contenu va exploser 🔥 #viral #trending</div>
+              <div class="tiktok-actions">
+                <div class="action-btn">❤️<span>2.1M</span></div>
+                <div class="action-btn">💬<span>18K</span></div>
+                <div class="action-btn">↗️<span>45K</span></div>
+                <div class="action-btn">🔖<span>90K</span></div>
+              </div>
+              <div class="tiktok-sound">🎵 Son viral · Trending</div>
+            </div>
+          </div>
+        </div>
+        <div class="phone-notch"></div>
+      </div>
+
+      <!-- Floating badges -->
+      <div class="float-badge badge-views" data-aos="fade-left" data-aos-delay="1000">
+        👁️ <strong>2.1M</strong> vues en 24h
+      </div>
+      <div class="float-badge badge-growth" data-aos="fade-right" data-aos-delay="1200">
+        📈 <strong>+340%</strong> de followers
+      </div>
+      <div class="float-badge badge-viral" data-aos="fade-up" data-aos-delay="1400">
+        🔥 Contenu Viral
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== TICKER TAPE ========== -->
+<div class="ticker">
+  <div class="ticker-track">
+    @for (i of [1, 2, 3, 4]; track i) {
+      <span class="ticker-item">CONTENU VIRAL</span>
+      <span class="ticker-sep">✦</span>
+      <span class="ticker-item">GROWTH HACKING</span>
+      <span class="ticker-sep">✦</span>
+      <span class="ticker-item">TIKTOK ADS</span>
+      <span class="ticker-sep">✦</span>
+      <span class="ticker-item">UGC CREATORS</span>
+      <span class="ticker-sep">✦</span>
+      <span class="ticker-item">850M VUES</span>
+      <span class="ticker-sep">✦</span>
+      <span class="ticker-item">120 MARQUES</span>
+      <span class="ticker-sep">✦</span>
+    }
+  </div>
+</div>
+
+<!-- ========== STATS ========== -->
+<section class="stats-section" id="stats">
+  <div class="stats-inner">
+    @for (stat of stats; track stat.label) {
+      <div class="stat-card" data-aos="fade-up" data-aos-delay="100">
+        <div class="stat-value">
+          <span class="count">{{ stat.current }}</span>
+          <span class="stat-suffix">{{ stat.suffix }}</span>
+        </div>
+        <div class="stat-label">{{ stat.label }}</div>
+        <div class="stat-bar">
+          <div class="stat-bar-fill"></div>
+        </div>
+      </div>
+    }
+  </div>
+</section>
+
+<!-- ========== SERVICES ========== -->
+<section class="services-section" id="services">
+  <div class="section-header" data-aos="fade-up">
+    <span class="section-tag">— Ce qu'on fait</span>
+    <h2 class="section-title">Services qui<br /><em>cartonnent</em></h2>
+    <p class="section-desc">
+      De la stratégie au montage, on gère tout pour que vous fassiez des vues.
+    </p>
+  </div>
+
+  <div class="services-grid">
+    @for (service of services; track service.title; let i = $index) {
+      <div
+        class="service-card"
+        data-aos="fade-up"
+        [attr.data-aos-delay]="(i % 3) * 100 + 100"
+        (mouseenter)="onServiceHover($event)"
+        (mouseleave)="onServiceLeave($event)"
+      >
+        <div class="service-tag">{{ service.tag }}</div>
+        <div class="service-icon">{{ service.icon }}</div>
+        <h3 class="service-title">{{ service.title }}</h3>
+        <p class="service-desc">{{ service.description }}</p>
+        <div class="service-arrow">→</div>
+        <div class="service-glow"></div>
+      </div>
+    }
+  </div>
+</section>
+
+<!-- ========== WORKS ========== -->
+<section class="works-section" id="works">
+  <div class="section-header" data-aos="fade-up">
+    <span class="section-tag">— Nos réalisations</span>
+    <h2 class="section-title">Des millions de<br /><em>vues prouvées</em></h2>
+  </div>
+
+  <div class="works-grid">
+    @for (work of works; track work.title; let i = $index) {
+      <div
+        class="work-card"
+        data-aos="zoom-in"
+        [attr.data-aos-delay]="(i % 3) * 120"
+        [style.--accent]="work.color"
+      >
+        <div class="work-cover">
+          <span class="work-emoji">{{ work.emoji }}</span>
+          <div class="work-overlay">
+            <div class="work-views">{{ work.views }}</div>
+          </div>
+        </div>
+        <div class="work-info">
+          <span class="work-category">{{ work.category }}</span>
+          <span class="work-handle">{{ work.title }}</span>
+        </div>
+      </div>
+    }
+  </div>
+</section>
+
+<!-- ========== PROCESS ========== -->
+<section class="process-section" data-aos="fade-up">
+  <div class="section-header">
+    <span class="section-tag">— Comment ça marche</span>
+    <h2 class="section-title">Du brief au<br /><em>buzz en 4 étapes</em></h2>
+  </div>
+
+  <div class="process-steps">
+    <div class="process-step" data-aos="fade-right" data-aos-delay="100">
+      <div class="step-number">01</div>
+      <div class="step-content">
+        <h3>Brief &amp; Stratégie</h3>
+        <p>
+          On analyse votre marque, vos objectifs et votre audience pour construire une stratégie
+          TikTok sur-mesure.
+        </p>
+      </div>
+    </div>
+    <div class="process-connector" data-aos="fade-right" data-aos-delay="150">⟶</div>
+    <div class="process-step" data-aos="fade-right" data-aos-delay="200">
+      <div class="step-number">02</div>
+      <div class="step-content">
+        <h3>Création de contenu</h3>
+        <p>
+          Scripting, tournage ou montage de vos UGC. On produit des vidéos taillées pour TikTok.
+        </p>
+      </div>
+    </div>
+    <div class="process-connector" data-aos="fade-right" data-aos-delay="250">⟶</div>
+    <div class="process-step" data-aos="fade-right" data-aos-delay="300">
+      <div class="step-number">03</div>
+      <div class="step-content">
+        <h3>Publication &amp; Ads</h3>
+        <p>
+          On poste au bon moment, on booste avec les ads et on surfe les tendances en temps réel.
+        </p>
+      </div>
+    </div>
+    <div class="process-connector" data-aos="fade-right" data-aos-delay="350">⟶</div>
+    <div class="process-step" data-aos="fade-right" data-aos-delay="400">
+      <div class="step-number">04</div>
+      <div class="step-content">
+        <h3>Analyse &amp; Scale</h3>
+        <p>
+          Reporting détaillé chaque semaine. On double la mise sur ce qui marche, on pivote vite sur
+          ce qui marche moins.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== CTA SECTION ========== -->
+<section class="cta-section" id="contact" data-aos="fade-up">
+  <div class="cta-inner">
+    <div class="cta-orb"></div>
+    <div class="cta-content">
+      <span class="cta-tag">Prêt à exploser ?</span>
+      <h2 class="cta-title">Votre prochaine vidéo<br />peut faire <em>des millions</em></h2>
+      <p class="cta-desc">Réservez un appel stratégique gratuit de 30 min avec notre équipe.</p>
+
+      <div class="contact-form">
+        <div class="form-row">
+          <div class="form-group">
+            <input type="text" placeholder="Votre nom" class="form-input" />
+          </div>
+          <div class="form-group">
+            <input type="email" placeholder="Votre email" class="form-input" />
+          </div>
+        </div>
+        <div class="form-group">
+          <input type="text" placeholder="Votre marque / projet" class="form-input" />
+        </div>
+        <button class="cta-btn-primary submit-btn">
+          <span>Réserver mon appel gratuit</span>
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M5 12h14M12 5l7 7-7 7" />
+          </svg>
+        </button>
+      </div>
+
+      <div class="cta-reassurance">
+        <span>✓ Réponse en 24h</span>
+        <span>✓ Sans engagement</span>
+        <span>✓ 100% gratuit</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== FOOTER ========== -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-logo">
+      <div class="nav-logo">
+        <span class="logo-icon">▶</span>
+        <span class="logo-text">TIKTOK<span class="logo-accent">STORM</span></span>
+      </div>
+      <p>L'agence qui transforme votre marque en phénomène TikTok.</p>
+    </div>
+
+    <div class="footer-links">
+      <div class="footer-col">
+        <h4>Services</h4>
+        <a href="#">Création de contenu</a>
+        <a href="#">TikTok Ads</a>
+        <a href="#">Growth Hacking</a>
+        <a href="#">UGC &amp; Influence</a>
+      </div>
+      <div class="footer-col">
+        <h4>Agence</h4>
+        <a href="#">À propos</a>
+        <a href="#">Réalisations</a>
+        <a href="#">Blog</a>
+        <a href="#">Carrières</a>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <a href="#">hello&#64;tiktoktorm.fr</a>
+        <a href="#">+33 1 23 45 67 89</a>
+        <a href="#">Paris, France</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <span>© 2025 TikTokStorm. Tous droits réservés.</span>
+    <div class="footer-socials">
+      <a href="#">TikTok</a>
+      <a href="#">Instagram</a>
+      <a href="#">LinkedIn</a>
+    </div>
+  </div>
+</footer>
