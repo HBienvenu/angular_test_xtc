@@ -1,384 +1,692 @@
-<!-- Custom Cursor -->
-<div class="cursor" #cursor></div>
-<div class="cursor-dot" #cursorDot></div>
-
-<!-- ========== NAVBAR ========== -->
-<nav class="navbar" #navEl>
-  <div class="nav-inner">
-    <a class="nav-logo" (click)="scrollTo('#hero')">
-      <span class="logo-icon">▶</span>
-      <span class="logo-text">TIKTOK<span class="logo-accent">STORM</span></span>
+<!-- ================================================
+     NAV
+     ================================================ -->
+<nav
+  class="fixed top-0 left-0 right-0 z-50 border-b border-transparent transition-all duration-[400ms]"
+  [class.nav-scrolled]="isScrolled"
+>
+  <div class="max-w-[1200px] mx-auto px-8 h-[70px] flex items-center justify-between">
+    <!-- Logo -->
+    <a href="#" class="flex items-baseline gap-0.5 font-serif-display text-2xl font-semibold">
+      <span class="text-[#a07840] dark:text-[#c9a96e] italic">X</span>
+      <span class="text-[#1a1814] dark:text-[#f0ead8]">ave The Creator</span>
     </a>
 
-    <ul class="nav-links">
-      @for (link of navLinks; track link.label) {
-        <li>
-          <a class="nav-link" (click)="scrollTo(link.href)">{{ link.label }}</a>
-        </li>
-      }
+    <!-- Desktop links -->
+    <ul class="hidden md:flex items-center gap-10">
+      <li>
+        <a
+          href="#services"
+          (click)="scrollTo($event, 'services')"
+          class="text-sm text-[#6b6358] dark:text-[#b8b0a0] hover:text-[#1a1814] dark:hover:text-[#f0ead8] transition-colors duration-[250ms]"
+          >Services</a
+        >
+      </li>
+      <li>
+        <a
+          href="#work"
+          (click)="scrollTo($event, 'work')"
+          class="text-sm text-[#6b6358] dark:text-[#b8b0a0] hover:text-[#1a1814] dark:hover:text-[#f0ead8] transition-colors duration-[250ms]"
+          >Projets</a
+        >
+      </li>
+      <li>
+        <a
+          href="#about"
+          (click)="scrollTo($event, 'about')"
+          class="text-sm text-[#6b6358] dark:text-[#b8b0a0] hover:text-[#1a1814] dark:hover:text-[#f0ead8] transition-colors duration-[250ms]"
+          >À propos</a
+        >
+      </li>
+      <li>
+        <a
+          href="#contact"
+          (click)="scrollTo($event, 'contact')"
+          class="text-sm px-5 py-2 rounded border border-[#a07840]/40 dark:border-[#c9a96e]/30 text-[#a07840] dark:text-[#c9a96e] hover:bg-[#a07840] dark:hover:bg-[#c9a96e] hover:text-white dark:hover:text-[#070706] hover:border-[#a07840] dark:hover:border-[#c9a96e] transition-all duration-[250ms]"
+          >Démarrer</a
+        >
+      </li>
     </ul>
 
-    <a class="nav-cta" (click)="scrollTo('#contact')">Démarrer →</a>
+    <!-- Right: dark toggle + burger -->
+    <div class="flex items-center gap-3">
+      <!-- Dark mode toggle -->
+      <button
+        (click)="toggleDark()"
+        class="w-9 h-9 flex items-center justify-center rounded-full border border-[#1a1814]/10 dark:border-[#f0ead8]/10 text-[#6b6358] dark:text-[#b8b0a0] hover:border-[#a07840]/40 dark:hover:border-[#c9a96e]/40 hover:text-[#a07840] dark:hover:text-[#c9a96e] transition-all duration-[250ms]"
+        [attr.aria-label]="darkMode ? 'Mode clair' : 'Mode sombre'"
+      >
+        <!-- Sun -->
+        <svg
+          *ngIf="darkMode"
+          width="15"
+          height="15"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+        >
+          <circle cx="12" cy="12" r="5" />
+          <path
+            d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"
+          />
+        </svg>
+        <!-- Moon -->
+        <svg
+          *ngIf="!darkMode"
+          width="15"
+          height="15"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+        >
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+        </svg>
+      </button>
 
-    <button class="burger" (click)="toggleMenu()" [class.open]="menuOpen">
-      <span></span><span></span><span></span>
-    </button>
+      <!-- Burger (mobile only) -->
+      <button
+        class="md:hidden flex flex-col justify-center gap-[5px] z-[1001] p-1"
+        [class.burger-open]="menuOpen"
+        (click)="toggleMenu()"
+        aria-label="Menu"
+      >
+        <span
+          class="burger-line block w-[22px] h-[1.5px] bg-[#1a1814] dark:bg-[#f0ead8] transition-all duration-300 origin-center"
+        ></span>
+        <span
+          class="burger-line block w-[22px] h-[1.5px] bg-[#1a1814] dark:bg-[#f0ead8] transition-all duration-300 origin-center"
+        ></span>
+        <span
+          class="burger-line block w-[22px] h-[1.5px] bg-[#1a1814] dark:bg-[#f0ead8] transition-all duration-300 origin-center"
+        ></span>
+      </button>
+    </div>
   </div>
 </nav>
 
-<!-- Mobile Menu -->
-<div class="mobile-menu" [class.open]="menuOpen">
-  <button class="close-menu" (click)="toggleMenu()">✕</button>
-  @for (link of navLinks; track link.label) {
-    <a (click)="scrollTo(link.href)">{{ link.label }}</a>
-  }
-  <a class="mobile-cta" (click)="scrollTo('#contact')">Démarrer le projet →</a>
+<!-- Mobile overlay menu -->
+<div
+  class="md:hidden fixed inset-0 z-40 flex flex-col items-center justify-center gap-8 bg-[#faf8f2]/[0.98] dark:bg-[#070706]/[0.98] backdrop-blur-xl transition-all duration-300"
+  [class.opacity-0]="!menuOpen"
+  [class.pointer-events-none]="!menuOpen"
+  [class.-translate-y-2]="!menuOpen"
+>
+  <a
+    (click)="scrollTo($event, 'services')"
+    href="#services"
+    class="font-serif-display text-3xl italic text-[#1a1814] dark:text-[#f0ead8]"
+    >Services</a
+  >
+  <a
+    (click)="scrollTo($event, 'work')"
+    href="#work"
+    class="font-serif-display text-3xl italic text-[#1a1814] dark:text-[#f0ead8]"
+    >Projets</a
+  >
+  <a
+    (click)="scrollTo($event, 'about')"
+    href="#about"
+    class="font-serif-display text-3xl italic text-[#1a1814] dark:text-[#f0ead8]"
+    >À propos</a
+  >
+  <a
+    (click)="scrollTo($event, 'contact')"
+    href="#contact"
+    class="mt-2 text-sm px-8 py-3 rounded font-medium bg-[#a07840] dark:bg-[#c9a96e] text-white dark:text-[#070706]"
+  >
+    Démarrer un projet
+  </a>
 </div>
 
-<!-- ========== HERO ========== -->
-<section class="hero-section" id="hero">
-  <!-- Background grid dots -->
-  <div class="grid-bg">
-    @for (
-      i of [
-        1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25,
-        26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48,
-        49, 50,
-      ];
-      track i
-    ) {
-      <span class="grid-dot"></span>
-    }
-  </div>
+<!-- ================================================
+     HERO
+     ================================================ -->
+<section
+  id="hero"
+  class="relative min-h-screen flex items-center px-8 overflow-hidden bg-[#faf8f2] dark:bg-[#070706]"
+>
+  <!-- Grain texture -->
+  <div class="grain absolute inset-0 pointer-events-none opacity-[0.035]"></div>
 
-  <!-- Neon Orbs -->
-  <div class="orb orb-1"></div>
-  <div class="orb orb-2"></div>
-  <div class="orb orb-3"></div>
+  <!-- Ambient glow -->
+  <div
+    class="hero-glow absolute -top-[10%] left-1/2 -translate-x-1/2 w-[700px] h-[700px] pointer-events-none"
+    style="background: radial-gradient(circle, rgba(160, 120, 64, 0.07) 0%, transparent 70%)"
+  ></div>
+  <div
+    class="absolute -top-[10%] left-1/2 -translate-x-1/2 w-[700px] h-[700px] pointer-events-none hidden dark:block"
+    style="background: radial-gradient(circle, rgba(201, 169, 110, 0.06) 0%, transparent 70%)"
+  ></div>
 
-  <div class="hero-inner">
-    <div class="hero-content">
-      <div class="hero-badge" data-aos="fade-right" data-aos-delay="200">
-        <span class="badge-dot"></span>
-        Agence #1 TikTok en France 🇫🇷
-      </div>
+  <!-- Vertical decorative line -->
+  <div
+    class="hidden lg:block absolute left-[calc(50%-580px)] top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-[#a07840]/10 dark:via-[#c9a96e]/10 to-transparent"
+  ></div>
 
-      <h1 class="hero-title">On rend votre marque VIRALE</h1>
-
-      <p class="hero-subtitle">
-        Contenus TikTok qui explosent l'algorithme.<br />
-        Stratégie, création &amp; performance réunis.
-      </p>
-
-      <div class="hero-cta">
-        <button class="cta-btn-primary" (click)="scrollTo('#contact')">
-          <span>Booster ma marque</span>
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-          >
-            <path d="M5 12h14M12 5l7 7-7 7" />
-          </svg>
-        </button>
-        <button class="cta-btn-secondary" (click)="scrollTo('#works')">
-          Voir nos réalisations
-        </button>
-      </div>
-
-      <div class="hero-trust">
-        <span>Ils nous font confiance :</span>
-        <div class="trust-logos">
-          <span>ZARA</span>
-          <span>L'ORÉAL</span>
-          <span>NIKE</span>
-          <span>SEPHORA</span>
-          <span>DÉCATHLON</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Phone Mockup -->
-    <div class="phone-mockup-wrapper">
-      <div class="phone-mockup">
-        <div class="phone-screen">
-          <div class="tiktok-ui">
-            <div class="tiktok-video-bg"></div>
-            <div class="tiktok-overlay">
-              <div class="tiktok-user">
-                <div class="user-avatar">🎬</div>
-                <div>
-                  <div class="user-name">&#64;votre_marque</div>
-                  <div class="user-follow">Suivre</div>
-                </div>
-              </div>
-              <div class="tiktok-desc">Ce contenu va exploser 🔥 #viral #trending</div>
-              <div class="tiktok-actions">
-                <div class="action-btn">❤️<span>2.1M</span></div>
-                <div class="action-btn">💬<span>18K</span></div>
-                <div class="action-btn">↗️<span>45K</span></div>
-                <div class="action-btn">🔖<span>90K</span></div>
-              </div>
-              <div class="tiktok-sound">🎵 Son viral · Trending</div>
-            </div>
-          </div>
-        </div>
-        <div class="phone-notch"></div>
-      </div>
-
-      <!-- Floating badges -->
-      <div class="float-badge badge-views" data-aos="fade-left" data-aos-delay="1000">
-        👁️ <strong>2.1M</strong> vues en 24h
-      </div>
-      <div class="float-badge badge-growth" data-aos="fade-right" data-aos-delay="1200">
-        📈 <strong>+340%</strong> de followers
-      </div>
-      <div class="float-badge badge-viral" data-aos="fade-up" data-aos-delay="1400">
-        🔥 Contenu Viral
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ========== TICKER TAPE ========== -->
-<div class="ticker">
-  <div class="ticker-track">
-    @for (i of [1, 2, 3, 4]; track i) {
-      <span class="ticker-item">CONTENU VIRAL</span>
-      <span class="ticker-sep">✦</span>
-      <span class="ticker-item">GROWTH HACKING</span>
-      <span class="ticker-sep">✦</span>
-      <span class="ticker-item">TIKTOK ADS</span>
-      <span class="ticker-sep">✦</span>
-      <span class="ticker-item">UGC CREATORS</span>
-      <span class="ticker-sep">✦</span>
-      <span class="ticker-item">850M VUES</span>
-      <span class="ticker-sep">✦</span>
-      <span class="ticker-item">120 MARQUES</span>
-      <span class="ticker-sep">✦</span>
-    }
-  </div>
-</div>
-
-<!-- ========== STATS ========== -->
-<section class="stats-section" id="stats">
-  <div class="stats-inner">
-    @for (stat of stats; track stat.label) {
-      <div class="stat-card" data-aos="fade-up" data-aos-delay="100">
-        <div class="stat-value">
-          <span class="count">{{ stat.current }}</span>
-          <span class="stat-suffix">{{ stat.suffix }}</span>
-        </div>
-        <div class="stat-label">{{ stat.label }}</div>
-        <div class="stat-bar">
-          <div class="stat-bar-fill"></div>
-        </div>
-      </div>
-    }
-  </div>
-</section>
-
-<!-- ========== SERVICES ========== -->
-<section class="services-section" id="services">
-  <div class="section-header" data-aos="fade-up">
-    <span class="section-tag">— Ce qu'on fait</span>
-    <h2 class="section-title">Services qui<br /><em>cartonnent</em></h2>
-    <p class="section-desc">
-      De la stratégie au montage, on gère tout pour que vous fassiez des vues.
+  <div class="relative z-10 max-w-[1200px] mx-auto w-full pt-[70px]">
+    <p
+      class="reveal-line text-[0.7rem] font-semibold tracking-[0.2em] uppercase mb-6 text-[#a07840] dark:text-[#c9a96e]"
+    >
+      Agence de création de contenu
     </p>
-  </div>
 
-  <div class="services-grid">
-    @for (service of services; track service.title; let i = $index) {
-      <div
-        class="service-card"
-        data-aos="fade-up"
-        [attr.data-aos-delay]="(i % 3) * 100 + 100"
-        (mouseenter)="onServiceHover($event)"
-        (mouseleave)="onServiceLeave($event)"
+    <h1
+      class="font-serif-display font-medium leading-none tracking-[-0.01em] mb-8"
+      style="font-size: clamp(3.5rem, 9vw, 7.5rem)"
+    >
+      <span class="reveal-line block text-[#1a1814] dark:text-[#f0ead8]">Nous donnons</span>
+      <span class="reveal-line block italic text-[#a07840] dark:text-[#c9a96e]">vie à votre</span>
+      <span class="reveal-line block text-[#1a1814] dark:text-[#f0ead8]">récit de marque.</span>
+    </h1>
+
+    <p
+      class="reveal-line leading-[1.7] max-w-[480px] mb-10 text-[#6b6358] dark:text-[#b8b0a0]"
+      style="font-size: clamp(1rem, 1.5vw, 1.15rem)"
+    >
+      Stratégie, production et distribution de contenu<br />
+      pour les marques qui veulent laisser une empreinte.
+    </p>
+
+    <div class="reveal-line flex flex-wrap gap-4">
+      <a
+        href="#work"
+        (click)="scrollTo($event, 'work')"
+        class="inline-flex items-center gap-2 px-8 py-[0.875rem] rounded text-sm font-medium bg-[#a07840] dark:bg-[#c9a96e] text-white dark:text-[#070706] hover:bg-[#8a6632] dark:hover:bg-[#e2c48a] hover:shadow-[0_8px_30px_rgba(160,120,64,0.3)] dark:hover:shadow-[0_8px_30px_rgba(201,169,110,0.25)] transition-all duration-300 group"
       >
-        <div class="service-tag">{{ service.tag }}</div>
-        <div class="service-icon">{{ service.icon }}</div>
-        <h3 class="service-title">{{ service.title }}</h3>
-        <p class="service-desc">{{ service.description }}</p>
-        <div class="service-arrow">→</div>
-        <div class="service-glow"></div>
-      </div>
-    }
-  </div>
-</section>
-
-<!-- ========== WORKS ========== -->
-<section class="works-section" id="works">
-  <div class="section-header" data-aos="fade-up">
-    <span class="section-tag">— Nos réalisations</span>
-    <h2 class="section-title">Des millions de<br /><em>vues prouvées</em></h2>
-  </div>
-
-  <div class="works-grid">
-    @for (work of works; track work.title; let i = $index) {
-      <div
-        class="work-card"
-        data-aos="zoom-in"
-        [attr.data-aos-delay]="(i % 3) * 120"
-        [style.--accent]="work.color"
-      >
-        <div class="work-cover">
-          <span class="work-emoji">{{ work.emoji }}</span>
-          <div class="work-overlay">
-            <div class="work-views">{{ work.views }}</div>
-          </div>
-        </div>
-        <div class="work-info">
-          <span class="work-category">{{ work.category }}</span>
-          <span class="work-handle">{{ work.title }}</span>
-        </div>
-      </div>
-    }
-  </div>
-</section>
-
-<!-- ========== PROCESS ========== -->
-<section class="process-section" data-aos="fade-up">
-  <div class="section-header">
-    <span class="section-tag">— Comment ça marche</span>
-    <h2 class="section-title">Du brief au<br /><em>buzz en 4 étapes</em></h2>
-  </div>
-
-  <div class="process-steps">
-    <div class="process-step" data-aos="fade-right" data-aos-delay="100">
-      <div class="step-number">01</div>
-      <div class="step-content">
-        <h3>Brief &amp; Stratégie</h3>
-        <p>
-          On analyse votre marque, vos objectifs et votre audience pour construire une stratégie
-          TikTok sur-mesure.
-        </p>
-      </div>
-    </div>
-    <div class="process-connector" data-aos="fade-right" data-aos-delay="150">⟶</div>
-    <div class="process-step" data-aos="fade-right" data-aos-delay="200">
-      <div class="step-number">02</div>
-      <div class="step-content">
-        <h3>Création de contenu</h3>
-        <p>
-          Scripting, tournage ou montage de vos UGC. On produit des vidéos taillées pour TikTok.
-        </p>
-      </div>
-    </div>
-    <div class="process-connector" data-aos="fade-right" data-aos-delay="250">⟶</div>
-    <div class="process-step" data-aos="fade-right" data-aos-delay="300">
-      <div class="step-number">03</div>
-      <div class="step-content">
-        <h3>Publication &amp; Ads</h3>
-        <p>
-          On poste au bon moment, on booste avec les ads et on surfe les tendances en temps réel.
-        </p>
-      </div>
-    </div>
-    <div class="process-connector" data-aos="fade-right" data-aos-delay="350">⟶</div>
-    <div class="process-step" data-aos="fade-right" data-aos-delay="400">
-      <div class="step-number">04</div>
-      <div class="step-content">
-        <h3>Analyse &amp; Scale</h3>
-        <p>
-          Reporting détaillé chaque semaine. On double la mise sur ce qui marche, on pivote vite sur
-          ce qui marche moins.
-        </p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ========== CTA SECTION ========== -->
-<section class="cta-section" id="contact" data-aos="fade-up">
-  <div class="cta-inner">
-    <div class="cta-orb"></div>
-    <div class="cta-content">
-      <span class="cta-tag">Prêt à exploser ?</span>
-      <h2 class="cta-title">Votre prochaine vidéo<br />peut faire <em>des millions</em></h2>
-      <p class="cta-desc">Réservez un appel stratégique gratuit de 30 min avec notre équipe.</p>
-
-      <div class="contact-form">
-        <div class="form-row">
-          <div class="form-group">
-            <input type="text" placeholder="Votre nom" class="form-input" />
-          </div>
-          <div class="form-group">
-            <input type="email" placeholder="Votre email" class="form-input" />
-          </div>
-        </div>
-        <div class="form-group">
-          <input type="text" placeholder="Votre marque / projet" class="form-input" />
-        </div>
-        <button class="cta-btn-primary submit-btn">
-          <span>Réserver mon appel gratuit</span>
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
+        <span>Voir nos projets</span>
+        <svg
+          class="transition-transform duration-300 group-hover:translate-x-1"
+          width="16"
+          height="16"
+          viewBox="0 0 16 16"
+          fill="none"
+        >
+          <path
+            d="M3 8h10M9 4l4 4-4 4"
             stroke="currentColor"
-            stroke-width="2"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </a>
+      <a
+        href="#contact"
+        (click)="scrollTo($event, 'contact')"
+        class="inline-flex items-center px-8 py-[0.875rem] rounded text-sm font-medium border border-[#1a1814]/12 dark:border-[#f0ead8]/10 text-[#6b6358] dark:text-[#b8b0a0] hover:border-[#a07840]/40 dark:hover:border-[#c9a96e]/30 hover:text-[#1a1814] dark:hover:text-[#f0ead8] transition-all duration-300"
+      >
+        Nous contacter
+      </a>
+    </div>
+  </div>
+
+  <!-- Stats desktop -->
+  <div class="absolute right-8 bottom-12 hidden lg:flex flex-col gap-6 z-10">
+    <div
+      *ngFor="let stat of stats"
+      class="text-right pr-4 border-r-2 border-[#a07840] dark:border-[#c9a96e]"
+    >
+      <strong
+        class="block font-serif-display text-[2rem] font-semibold leading-none text-[#1a1814] dark:text-[#f0ead8]"
+        >{{ stat.value }}</strong
+      >
+      <span class="text-[0.7rem] tracking-[0.05em] text-[#6b6358] dark:text-[#b8b0a0]">{{
+        stat.label
+      }}</span>
+    </div>
+  </div>
+
+  <!-- Scroll hint -->
+  <div
+    class="scroll-hint absolute bottom-10 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-3 text-[0.65rem] tracking-[0.15em] uppercase text-[#6b6358] dark:text-[#b8b0a0]"
+  >
+    <span>Défiler</span>
+    <div
+      class="scroll-line w-px h-[50px]"
+      style="background: linear-gradient(to bottom, #a07840, transparent)"
+    ></div>
+  </div>
+</section>
+
+<!-- ================================================
+     SERVICES
+     ================================================ -->
+<section
+  id="services"
+  class="py-32 bg-[#f2ede4] dark:bg-[#0f0f0d] border-y border-[#1a1814]/[0.08] dark:border-[#f0ead8]/[0.08]"
+>
+  <div class="max-w-[1200px] mx-auto px-8">
+    <div class="mb-16">
+      <span
+        class="inline-block text-[0.7rem] font-semibold tracking-[0.18em] uppercase mb-5 text-[#a07840] dark:text-[#c9a96e]"
+        >Ce que nous faisons</span
+      >
+      <h2
+        class="font-serif-display font-medium leading-[1.1]"
+        style="font-size: clamp(2.4rem, 5vw, 3.8rem)"
+      >
+        <span class="text-[#1a1814] dark:text-[#f0ead8]">Un écosystème<br /></span>
+        <em class="italic text-[#a07840] dark:text-[#c9a96e]">complet</em>
+        <span class="text-[#1a1814] dark:text-[#f0ead8]"> pour votre contenu.</span>
+      </h2>
+    </div>
+
+    <!-- Services grid -->
+    <div
+      class="grid grid-cols-1 md:grid-cols-3 gap-[1.5px] bg-[#1a1814]/[0.07] dark:bg-[#f0ead8]/[0.07] border border-[#1a1814]/[0.07] dark:border-[#f0ead8]/[0.07] rounded-xl overflow-hidden"
+    >
+      <article
+        *ngFor="let service of services; let i = index"
+        class="group relative bg-[#ede8de] dark:bg-[#141412] p-10 overflow-hidden hover:bg-[#e5ddd1] dark:hover:bg-[#1a1917] transition-colors duration-300"
+      >
+        <!-- Hover bottom line -->
+        <div
+          class="service-underline absolute bottom-0 left-0 right-0 h-[2px] scale-x-0 group-hover:scale-x-100 transition-transform duration-[400ms] origin-center"
+          style="background: linear-gradient(90deg, transparent, #a07840, transparent)"
+        ></div>
+        <div
+          class="service-underline absolute bottom-0 left-0 right-0 h-[2px] scale-x-0 group-hover:scale-x-100 transition-transform duration-[400ms] origin-center hidden dark:block"
+          style="background: linear-gradient(90deg, transparent, #c9a96e, transparent)"
+        ></div>
+
+        <!-- Number watermark -->
+        <span
+          class="absolute top-6 right-6 font-serif-display text-5xl font-light leading-none select-none text-[#1a1814]/[0.07] dark:text-[#f0ead8]/[0.07] group-hover:text-[#a07840]/[0.12] dark:group-hover:text-[#c9a96e]/[0.12] transition-colors duration-300"
+          >0{{ i + 1 }}</span
+        >
+
+        <div class="text-[#a07840] dark:text-[#c9a96e] mb-6" [innerHTML]="service.icon"></div>
+
+        <h3 class="font-serif-display text-2xl font-medium mb-3 text-[#1a1814] dark:text-[#f0ead8]">
+          {{ service.title }}
+        </h3>
+
+        <p class="text-sm leading-[1.7] mb-6 text-[#6b6358] dark:text-[#b8b0a0]">
+          {{ service.description }}
+        </p>
+
+        <ul class="flex flex-wrap gap-2">
+          <li
+            *ngFor="let item of service.items"
+            class="text-[0.7rem] tracking-[0.04em] px-3 py-1 rounded-full border border-[#1a1814]/[0.1] dark:border-[#f0ead8]/[0.08] text-[#6b6358] dark:text-[#b8b0a0] group-hover:border-[#a07840]/30 dark:group-hover:border-[#c9a96e]/30 group-hover:text-[#1a1814] dark:group-hover:text-[#f0ead8] transition-all duration-[250ms]"
           >
-            <path d="M5 12h14M12 5l7 7-7 7" />
-          </svg>
-        </button>
+            {{ item }}
+          </li>
+        </ul>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================
+     WORK / PORTFOLIO
+     ================================================ -->
+<section id="work" class="py-32 bg-[#faf8f2] dark:bg-[#070706]">
+  <div class="max-w-[1200px] mx-auto px-8">
+    <div class="mb-16">
+      <span
+        class="inline-block text-[0.7rem] font-semibold tracking-[0.18em] uppercase mb-5 text-[#a07840] dark:text-[#c9a96e]"
+        >Portfolio</span
+      >
+      <h2
+        class="font-serif-display font-medium leading-[1.1]"
+        style="font-size: clamp(2.4rem, 5vw, 3.8rem)"
+      >
+        <span class="text-[#1a1814] dark:text-[#f0ead8]">Des projets qui<br /></span>
+        <em class="italic text-[#a07840] dark:text-[#c9a96e]">parlent</em>
+        <span class="text-[#1a1814] dark:text-[#f0ead8]"> d'eux-mêmes.</span>
+      </h2>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+      <article
+        *ngFor="let project of projects; let i = index"
+        class="group rounded-xl overflow-hidden cursor-pointer border border-[#1a1814]/[0.08] dark:border-[#f0ead8]/[0.08] hover:border-[#a07840]/40 dark:hover:border-[#c9a96e]/30 hover:-translate-y-1 transition-all duration-300"
+        [class.sm:col-span-2]="i === 0"
+      >
+        <!-- Visual -->
+        <div class="relative overflow-hidden" [style.height]="i === 0 ? '380px' : '240px'">
+          <div
+            class="absolute inset-0 group-hover:scale-[1.04] transition-transform duration-500"
+            [style.background]="project.color"
+          ></div>
+          <div
+            class="absolute inset-0 opacity-20"
+            style="
+              background-image: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 20px,
+                rgba(255, 255, 255, 0.03) 20px,
+                rgba(255, 255, 255, 0.03) 21px
+              );
+            "
+          ></div>
+          <div
+            class="absolute inset-0 bg-black/0 group-hover:bg-black/15 transition-colors duration-300"
+          ></div>
+        </div>
+
+        <!-- Info -->
+        <div class="p-6 bg-[#ede8de] dark:bg-[#141412]">
+          <span
+            class="block text-[0.65rem] font-semibold tracking-[0.15em] uppercase mb-1 text-[#a07840] dark:text-[#c9a96e]"
+            >{{ project.category }}</span
+          >
+          <h3
+            class="font-serif-display text-[1.3rem] font-medium mb-3 text-[#1a1814] dark:text-[#f0ead8]"
+          >
+            {{ project.title }}
+          </h3>
+          <a
+            href="#"
+            class="inline-flex items-center gap-1.5 text-[0.8rem] group/lnk text-[#6b6358] dark:text-[#b8b0a0] hover:text-[#a07840] dark:hover:text-[#c9a96e] transition-colors duration-[250ms]"
+          >
+            Voir le projet
+            <svg
+              class="group-hover/lnk:translate-x-1 transition-transform duration-[250ms]"
+              width="13"
+              height="13"
+              viewBox="0 0 14 14"
+              fill="none"
+            >
+              <path
+                d="M2 7h10M8 3l4 4-4 4"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+              />
+            </svg>
+          </a>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================
+     ABOUT
+     ================================================ -->
+<section
+  id="about"
+  class="py-32 bg-[#f2ede4] dark:bg-[#0f0f0d] border-y border-[#1a1814]/[0.08] dark:border-[#f0ead8]/[0.08]"
+>
+  <div class="max-w-[1200px] mx-auto px-8">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+      <!-- Quote visual -->
+      <div class="relative aspect-square max-h-[480px]">
+        <div
+          class="absolute inset-0 rounded-xl border border-[#1a1814]/[0.08] dark:border-[#f0ead8]/[0.08]"
+          style="background: linear-gradient(135deg, rgba(160, 120, 64, 0.06) 0%, transparent 60%)"
+        ></div>
+        <!-- Offset frame -->
+        <div
+          class="absolute top-6 left-6 -right-6 -bottom-6 rounded-xl pointer-events-none border border-[#1a1814]/[0.05] dark:border-[#f0ead8]/[0.05]"
+        ></div>
+        <div class="absolute inset-0 flex items-center justify-center p-10">
+          <blockquote
+            class="font-serif-display font-light italic leading-[1.5] text-center text-[#1a1814] dark:text-[#f0ead8]"
+            style="font-size: clamp(1.2rem, 2.5vw, 1.6rem)"
+          >
+            <span
+              class="block font-serif-display text-5xl not-italic leading-none mb-4 text-[#a07840] dark:text-[#c9a96e]"
+              >❝</span
+            >
+            Le contenu n'est pas un coût.<br />C'est un investissement.
+          </blockquote>
+        </div>
       </div>
 
-      <div class="cta-reassurance">
-        <span>✓ Réponse en 24h</span>
-        <span>✓ Sans engagement</span>
-        <span>✓ 100% gratuit</span>
+      <!-- Text content -->
+      <div>
+        <span
+          class="inline-block text-[0.7rem] font-semibold tracking-[0.18em] uppercase mb-5 text-[#a07840] dark:text-[#c9a96e]"
+          >Notre philosophie</span
+        >
+        <h2
+          class="font-serif-display font-medium leading-[1.1] mb-8"
+          style="font-size: clamp(2.4rem, 5vw, 3.8rem)"
+        >
+          <span class="text-[#1a1814] dark:text-[#f0ead8]">Créer du contenu<br />qui </span>
+          <em class="italic text-[#a07840] dark:text-[#c9a96e]">convertit</em>
+          <span class="text-[#1a1814] dark:text-[#f0ead8]">.</span>
+        </h2>
+
+        <p class="text-base leading-[1.8] mb-8 max-w-[480px] text-[#6b6358] dark:text-[#b8b0a0]">
+          Chez Xave The Creator, nous croyons que chaque marque a une histoire unique à raconter.
+          Notre rôle est de la révéler, de l'amplifier et de la diffuser là où elle compte le plus.
+        </p>
+
+        <ul class="flex flex-col gap-5 mb-10">
+          <li *ngFor="let val of values" class="flex items-start gap-4">
+            <span
+              class="mt-[7px] w-2 h-2 rounded-full shrink-0 bg-[#a07840] dark:bg-[#c9a96e]"
+            ></span>
+            <div>
+              <strong
+                class="block text-[0.9rem] font-semibold mb-1 text-[#1a1814] dark:text-[#f0ead8]"
+                >{{ val.title }}</strong
+              >
+              <span class="text-[0.825rem] text-[#6b6358] dark:text-[#b8b0a0]">{{ val.desc }}</span>
+            </div>
+          </li>
+        </ul>
+
+        <a
+          href="#contact"
+          (click)="scrollTo($event, 'contact')"
+          class="inline-flex items-center gap-2 px-8 py-[0.875rem] rounded text-sm font-medium bg-[#a07840] dark:bg-[#c9a96e] text-white dark:text-[#070706] hover:bg-[#8a6632] dark:hover:bg-[#e2c48a] transition-all duration-300 group"
+        >
+          <span>Travailler avec nous</span>
+          <svg
+            class="transition-transform duration-300 group-hover:translate-x-1"
+            width="16"
+            height="16"
+            viewBox="0 0 16 16"
+            fill="none"
+          >
+            <path
+              d="M3 8h10M9 4l4 4-4 4"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </a>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ========== FOOTER ========== -->
-<footer class="footer">
-  <div class="footer-inner">
-    <div class="footer-logo">
-      <div class="nav-logo">
-        <span class="logo-icon">▶</span>
-        <span class="logo-text">TIKTOK<span class="logo-accent">STORM</span></span>
+<!-- ================================================
+     TESTIMONIALS
+     ================================================ -->
+<section class="py-28 text-center overflow-hidden bg-[#faf8f2] dark:bg-[#070706]">
+  <div class="max-w-[1200px] mx-auto px-8">
+    <div class="relative min-h-[200px] mb-8">
+      <div
+        *ngFor="let t of testimonials; let i = index"
+        class="flex flex-col items-center transition-all duration-500"
+        [class.absolute]="activeTestimonial !== i"
+        [class.inset-0]="activeTestimonial !== i"
+        [class.opacity-0]="activeTestimonial !== i"
+        [class.translate-y-3]="activeTestimonial !== i"
+        [class.pointer-events-none]="activeTestimonial !== i"
+      >
+        <blockquote
+          class="font-serif-display italic font-light leading-[1.6] max-w-[700px] mx-auto mb-6 text-[#1a1814] dark:text-[#f0ead8]"
+          style="font-size: clamp(1.1rem, 2.5vw, 1.5rem)"
+        >
+          {{ t.quote }}
+        </blockquote>
+
+        <cite class="not-italic">
+          <strong class="block text-sm font-semibold text-[#a07840] dark:text-[#c9a96e]">{{
+            t.name
+          }}</strong>
+          <span class="text-[0.775rem] text-[#6b6358] dark:text-[#b8b0a0]">{{ t.role }}</span>
+        </cite>
       </div>
-      <p>L'agence qui transforme votre marque en phénomène TikTok.</p>
     </div>
 
-    <div class="footer-links">
-      <div class="footer-col">
-        <h4>Services</h4>
-        <a href="#">Création de contenu</a>
-        <a href="#">TikTok Ads</a>
-        <a href="#">Growth Hacking</a>
-        <a href="#">UGC &amp; Influence</a>
+    <!-- Pill dots -->
+    <div class="flex justify-center gap-2">
+      <button
+        *ngFor="let t of testimonials; let i = index"
+        (click)="setTestimonial(i)"
+        class="h-[6px] rounded-full transition-all duration-300"
+        [class.w-5]="activeTestimonial === i"
+        [class.w-[6px]]="activeTestimonial !== i"
+        [class.bg-[#a07840]]="activeTestimonial === i"
+        [class.dark:bg-[#c9a96e]]="activeTestimonial === i"
+        [class.bg-[#1a1814]/20]="activeTestimonial !== i"
+        [class.dark:bg-[#f0ead8]/20]="activeTestimonial !== i"
+        [attr.aria-label]="'Témoignage ' + (i + 1)"
+      ></button>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================
+     CONTACT
+     ================================================ -->
+<section
+  id="contact"
+  class="relative overflow-hidden py-32 px-8 bg-[#f2ede4] dark:bg-[#0f0f0d] border-y border-[#1a1814]/[0.08] dark:border-[#f0ead8]/[0.08]"
+>
+  <!-- Glow -->
+  <div
+    class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] pointer-events-none"
+    style="background: radial-gradient(circle, rgba(160, 120, 64, 0.06) 0%, transparent 70%)"
+  ></div>
+
+  <div class="relative z-10 max-w-[640px] mx-auto text-center">
+    <span
+      class="inline-block text-[0.7rem] font-semibold tracking-[0.18em] uppercase mb-5 text-[#a07840] dark:text-[#c9a96e]"
+      >Contact</span
+    >
+
+    <h2
+      class="font-serif-display font-medium leading-[1.1] mb-5 text-[#1a1814] dark:text-[#f0ead8]"
+      style="font-size: clamp(2.5rem, 6vw, 4.5rem)"
+    >
+      Prêt à créer<br />
+      <em class="italic text-[#a07840] dark:text-[#c9a96e]">quelque chose</em><br />
+      d'exceptionnel&nbsp;?
+    </h2>
+
+    <p class="text-[0.9rem] mb-12 text-[#6b6358] dark:text-[#b8b0a0]">
+      Parlez-nous de votre projet. Nous répondons sous 24h.
+    </p>
+
+    <form class="text-left flex flex-col gap-4" (submit)="onSubmit($event)">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <input
+          type="text"
+          placeholder="Votre nom"
+          required
+          class="w-full px-4 py-[0.875rem] rounded text-sm outline-none bg-white/50 dark:bg-[#f0ead8]/[0.04] border border-[#1a1814]/[0.1] dark:border-[#f0ead8]/[0.08] text-[#1a1814] dark:text-[#f0ead8] placeholder:text-[#6b6358]/50 dark:placeholder:text-[#b8b0a0]/50 focus:border-[#a07840]/40 dark:focus:border-[#c9a96e]/30 focus:bg-white dark:focus:bg-[#f0ead8]/[0.06] transition-all duration-[250ms]"
+        />
+        <input
+          type="email"
+          placeholder="Votre email"
+          required
+          class="w-full px-4 py-[0.875rem] rounded text-sm outline-none bg-white/50 dark:bg-[#f0ead8]/[0.04] border border-[#1a1814]/[0.1] dark:border-[#f0ead8]/[0.08] text-[#1a1814] dark:text-[#f0ead8] placeholder:text-[#6b6358]/50 dark:placeholder:text-[#b8b0a0]/50 focus:border-[#a07840]/40 dark:focus:border-[#c9a96e]/30 focus:bg-white dark:focus:bg-[#f0ead8]/[0.06] transition-all duration-[250ms]"
+        />
       </div>
-      <div class="footer-col">
-        <h4>Agence</h4>
-        <a href="#">À propos</a>
-        <a href="#">Réalisations</a>
-        <a href="#">Blog</a>
-        <a href="#">Carrières</a>
-      </div>
-      <div class="footer-col">
-        <h4>Contact</h4>
-        <a href="#">hello&#64;tiktoktorm.fr</a>
-        <a href="#">+33 1 23 45 67 89</a>
-        <a href="#">Paris, France</a>
+
+      <select
+        class="w-full px-4 py-[0.875rem] rounded text-sm outline-none appearance-none cursor-pointer bg-white/50 dark:bg-[#f0ead8]/[0.04] border border-[#1a1814]/[0.1] dark:border-[#f0ead8]/[0.08] text-[#6b6358] dark:text-[#b8b0a0] focus:border-[#a07840]/40 dark:focus:border-[#c9a96e]/30 transition-all duration-[250ms]"
+      >
+        <option value="" disabled selected>Quel service vous intéresse ?</option>
+        <option>Stratégie de contenu</option>
+        <option>Production vidéo</option>
+        <option>Gestion réseaux sociaux</option>
+        <option>Autre</option>
+      </select>
+
+      <textarea
+        rows="4"
+        placeholder="Décrivez votre projet en quelques mots..."
+        class="w-full px-4 py-[0.875rem] rounded text-sm outline-none resize-none bg-white/50 dark:bg-[#f0ead8]/[0.04] border border-[#1a1814]/[0.1] dark:border-[#f0ead8]/[0.08] text-[#1a1814] dark:text-[#f0ead8] placeholder:text-[#6b6358]/50 dark:placeholder:text-[#b8b0a0]/50 focus:border-[#a07840]/40 dark:focus:border-[#c9a96e]/30 focus:bg-white dark:focus:bg-[#f0ead8]/[0.06] transition-all duration-[250ms]"
+      ></textarea>
+
+      <button
+        type="submit"
+        class="w-full flex items-center justify-center gap-2 px-8 py-[1.05rem] rounded text-[0.95rem] font-medium bg-[#a07840] dark:bg-[#c9a96e] text-white dark:text-[#070706] hover:bg-[#8a6632] dark:hover:bg-[#e2c48a] hover:shadow-[0_8px_30px_rgba(160,120,64,0.3)] dark:hover:shadow-[0_8px_30px_rgba(201,169,110,0.25)] transition-all duration-300 group"
+      >
+        <span>Envoyer le message</span>
+        <svg
+          class="transition-transform duration-300 group-hover:translate-x-1"
+          width="16"
+          height="16"
+          viewBox="0 0 16 16"
+          fill="none"
+        >
+          <path
+            d="M3 8h10M9 4l4 4-4 4"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </button>
+    </form>
+  </div>
+</section>
+
+<!-- ================================================
+     FOOTER
+     ================================================ -->
+<footer class="bg-[#faf8f2] dark:bg-[#070706] pt-16 pb-8">
+  <div
+    class="max-w-[1200px] mx-auto px-8 grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-16 pb-12 mb-8 border-b border-[#1a1814]/[0.08] dark:border-[#f0ead8]/[0.08]"
+  >
+    <!-- Brand -->
+    <div>
+      <a
+        href="#"
+        class="flex items-baseline gap-0.5 font-serif-display text-2xl font-semibold mb-4"
+      >
+        <span class="text-[#a07840] dark:text-[#c9a96e] italic">X</span>
+        <span class="text-[#1a1814] dark:text-[#f0ead8]">ave The Creator</span>
+      </a>
+      <p class="text-[0.825rem] leading-[1.7] text-[#6b6358] dark:text-[#b8b0a0]">
+        Agence de création de contenu.<br />Paris, France.
+      </p>
+    </div>
+
+    <!-- Link columns -->
+    <div class="grid grid-cols-2 sm:grid-cols-3 gap-8">
+      <div *ngFor="let col of footerCols">
+        <h4
+          class="text-[0.7rem] font-semibold tracking-[0.15em] uppercase mb-4 text-[#a07840] dark:text-[#c9a96e]"
+        >
+          {{ col.title }}
+        </h4>
+        <ul class="flex flex-col gap-[0.6rem]">
+          <li *ngFor="let link of col.links">
+            <a
+              href="#"
+              class="text-[0.825rem] text-[#6b6358] dark:text-[#b8b0a0] hover:text-[#1a1814] dark:hover:text-[#f0ead8] transition-colors duration-200"
+              >{{ link }}</a
+            >
+          </li>
+        </ul>
       </div>
     </div>
   </div>
 
-  <div class="footer-bottom">
-    <span>© 2025 TikTokStorm. Tous droits réservés.</span>
-    <div class="footer-socials">
-      <a href="#">TikTok</a>
-      <a href="#">Instagram</a>
-      <a href="#">LinkedIn</a>
-    </div>
+  <div
+    class="max-w-[1200px] mx-auto px-8 flex flex-col sm:flex-row justify-between gap-2 text-[0.75rem] text-[#6b6358]/40 dark:text-[#b8b0a0]/40"
+  >
+    <span>© 2025 Xave The Creator. Tous droits réservés.</span>
+    <span>Conçu avec intention.</span>
   </div>
 </footer>

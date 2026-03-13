@@ -1,41 +1,17 @@
 import {
   Component,
   OnInit,
-  AfterViewInit,
   OnDestroy,
-  ElementRef,
-  ViewChild,
-  PLATFORM_ID,
+  AfterViewInit,
+  HostListener,
   Inject,
+  PLATFORM_ID,
 } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-declare const gsap: any;
-declare const AOS: any;
-declare const anime: any;
-declare const ScrollTrigger: any;
-
-interface Service {
-  icon: string;
-  title: string;
-  description: string;
-  tag: string;
-}
-
-interface Stat {
-  value: number;
-  suffix: string;
-  label: string;
-  current: number;
-}
-
-interface Work {
-  category: string;
-  title: string;
-  views: string;
-  color: string;
-  emoji: string;
-}
+gsap.registerPlugin(ScrollTrigger);
 
 @Component({
   selector: 'app-home',
@@ -45,405 +21,225 @@ interface Work {
   styleUrl: './home.css',
 })
 export class Home implements OnInit, AfterViewInit, OnDestroy {
-  @ViewChild('heroTitle') heroTitle!: ElementRef;
-  @ViewChild('cursor') cursor!: ElementRef;
-  @ViewChild('cursorDot') cursorDot!: ElementRef;
-  @ViewChild('navEl') navEl!: ElementRef;
-
-  isBrowser: boolean;
+  isScrolled = false;
   menuOpen = false;
-  private mouseMoveHandler!: (e: MouseEvent) => void;
-  private scrollHandler!: () => void;
-  private statsObserver!: IntersectionObserver;
-  statsAnimated = false;
+  darkMode = true; // dark by default
+  activeTestimonial = 0;
+  private testimonialInterval: any;
 
-  navLinks = [
-    { label: 'Services', href: '#services' },
-    { label: 'Réalisations', href: '#works' },
-    { label: 'Stats', href: '#stats' },
-    { label: 'Contact', href: '#contact' },
+  stats = [
+    { value: '120+', label: 'Projets livrés' },
+    { value: '98%', label: 'Clients satisfaits' },
+    { value: '5M+', label: 'Vues générées' },
   ];
 
-  stats: Stat[] = [
-    { value: 850, suffix: 'M+', label: 'Vues générées', current: 0 },
-    { value: 120, suffix: '+', label: 'Marques partenaires', current: 0 },
-    { value: 98, suffix: '%', label: 'Taux de satisfaction', current: 0 },
-    { value: 4, suffix: 'ans', label: "D'expérience TikTok", current: 0 },
-  ];
-
-  services: Service[] = [
+  services = [
     {
-      icon: '🎬',
-      title: 'Création de Contenu',
-      description:
-        "Scripts viraux, tournage et montage optimisés pour l'algorithme TikTok. Chaque vidéo est conçue pour accrocher dans les 3 premières secondes.",
-      tag: 'Viral First',
+      icon: `<svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+        <path d="M4 6h20M4 12h14M4 18h18M4 24h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      </svg>`,
+      title: 'Stratégie de contenu',
+      description: 'Nous analysons votre audience, vos objectifs et votre marché pour construire une stratégie éditoriale percutante.',
+      items: ['Audit de contenu', 'Calendrier éditorial', 'Positionnement', 'SEO & distribution'],
     },
     {
-      icon: '📈',
-      title: 'Growth Hacking',
-      description:
-        'Stratégie de croissance organique combinant trends analysis, posting schedule et optimisation des hashtags pour maximiser votre reach.',
-      tag: 'Organique',
+      icon: `<svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+        <rect x="3" y="5" width="22" height="16" rx="2" stroke="currentColor" stroke-width="1.8"/>
+        <circle cx="14" cy="13" r="4" stroke="currentColor" stroke-width="1.8"/>
+        <path d="M10 23h8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      </svg>`,
+      title: 'Production vidéo & photo',
+      description: 'Du tournage à la post-production, nous créons des visuels qui captivent et racontent votre histoire.',
+      items: ['Tournage pro', 'Motion design', 'Reels & short-form', 'Photographie édi.'],
     },
     {
-      icon: '🤝',
-      title: 'Influence & UGC',
-      description:
-        'Réseau de créateurs TikTok triés sur le volet. Campagnes UGC authentiques qui convertissent mieux que la pub traditionnelle.',
-      tag: '500+ Créateurs',
-    },
-    {
-      icon: '🎯',
-      title: 'TikTok Ads',
-      description:
-        'Gestion complète de vos campagnes publicitaires TikTok. ROAS optimisé, creatives A/B testés et reporting temps réel.',
-      tag: 'Performance',
-    },
-    {
-      icon: '🔊',
-      title: 'Son & Tendances',
-      description:
-        "Veille permanente sur les sons viraux, challenges et trends. On surfe la vague avant qu'elle n'arrive sur le feed grand public.",
-      tag: 'Avant-garde',
-    },
-    {
-      icon: '📊',
-      title: 'Analytics & Audit',
-      description:
-        "Audit complet de votre présence TikTok avec roadmap d'optimisation personnalisée. Data-driven, toujours.",
-      tag: 'Data',
+      icon: `<svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+        <circle cx="14" cy="14" r="10" stroke="currentColor" stroke-width="1.8"/>
+        <path d="M14 8v6l4 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        <path d="M7 20l3-2M21 20l-3-2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      </svg>`,
+      title: 'Gestion réseaux sociaux',
+      description: 'Nous prenons en charge votre présence digitale pour construire une communauté engagée autour de votre marque.',
+      items: ['Community mgmt', 'Publicité sociale', 'Reporting mensuel', 'Veille concurrentielle'],
     },
   ];
 
-  works: Work[] = [
+  projects = [
     {
-      category: 'Mode & Lifestyle',
-      title: '@zenith_paris',
-      views: '12.4M vues',
-      color: '#ff0050',
-      emoji: '👗',
+      title: 'Campagne Été — Maison Dorée',
+      category: 'Production vidéo',
+      color: 'linear-gradient(135deg, #1a1208 0%, #3d2a0e 100%)',
     },
     {
-      category: 'Food & Resto',
-      title: '@le_petit_chef',
-      views: '8.7M vues',
-      color: '#00f2ea',
-      emoji: '🍜',
+      title: 'Refonte Social Media — TechFlow',
+      category: 'Stratégie & Social',
+      color: 'linear-gradient(135deg, #080c1a 0%, #0e1f3d 100%)',
     },
     {
-      category: 'Tech & Gadgets',
-      title: '@techwave_fr',
-      views: '21M vues',
-      color: '#ff0050',
-      emoji: '📱',
+      title: 'Brand Content — Natura Studio',
+      category: 'Photographie',
+      color: 'linear-gradient(135deg, #0a130a 0%, #1a2e1a 100%)',
     },
     {
-      category: 'Beauté & Skincare',
-      title: '@glow_studio',
-      views: '15.2M vues',
-      color: '#00f2ea',
-      emoji: '✨',
-    },
-    {
-      category: 'Sport & Fitness',
-      title: '@fit_republic',
-      views: '9.1M vues',
-      color: '#ff0050',
-      emoji: '💪',
-    },
-    {
-      category: 'E-commerce',
-      title: '@shop_viral',
-      views: '18.6M vues',
-      color: '#00f2ea',
-      emoji: '🛍️',
+      title: 'Série documentaire — Artisans',
+      category: 'Production',
+      color: 'linear-gradient(135deg, #13080d 0%, #2e0e1d 100%)',
     },
   ];
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {
-    this.isBrowser = isPlatformBrowser(platformId);
+  values = [
+    { title: 'Authenticité', desc: 'Chaque contenu reflète fidèlement votre ADN de marque.' },
+    { title: 'Impact mesurable', desc: 'Nous pilotons par les données, pas par les suppositions.' },
+    { title: 'Excellence', desc: 'Aucun compromis sur la qualité, quelle que soit l\'échelle.' },
+  ];
+
+  testimonials = [
+    {
+      quote: '« Xave The Creator a transformé notre présence digitale. En 6 mois, notre engagement a triplé et nos ventes en ligne ont bondi de 40%. »',
+      name: 'Sophie Moreau',
+      role: 'Directrice Marketing, Maison Dorée',
+    },
+    {
+      quote: '« Une équipe créative et stratégique à la fois. Rares sont les agences capables de produire du contenu aussi qualitatif tout en respectant les délais. »',
+      name: 'Alexandre Petit',
+      role: 'CEO, TechFlow',
+    },
+    {
+      quote: '« Ils ont su saisir l\'essence de notre marque et la retranscrire en contenu qui résonne vraiment avec notre audience. Résultat exceptionnel. »',
+      name: 'Camille Durand',
+      role: 'Fondatrice, Natura Studio',
+    },
+  ];
+
+  footerCols = [
+    {
+      title: 'Services',
+      links: ['Stratégie contenu', 'Production vidéo', 'Social media', 'Copywriting'],
+    },
+    {
+      title: 'Agence',
+      links: ['À propos', 'Portfolio', 'Blog', 'Contact'],
+    },
+    {
+      title: 'Suivez-nous',
+      links: ['Instagram', 'LinkedIn', 'YouTube', 'TikTok'],
+    },
+  ];
+
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
+
+  ngOnInit(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      // Restore saved preference or default to dark
+      const saved = localStorage.getItem('xave-theme');
+      this.darkMode = saved ? saved === 'dark' : true;
+      this.applyDark();
+    }
+
+    this.testimonialInterval = setInterval(() => {
+      this.activeTestimonial = (this.activeTestimonial + 1) % this.testimonials.length;
+    }, 5000);
   }
-
-  ngOnInit(): void {}
 
   ngAfterViewInit(): void {
-    if (!this.isBrowser) return;
-
-    setTimeout(() => {
-      this.initAOS();
-      this.initGSAP();
-      this.initAnime();
-      this.initCursor();
-      this.initNavScroll();
-      this.initStatsObserver();
-    }, 100);
+    if (!isPlatformBrowser(this.platformId)) return;
+    this.initAnimations();
   }
 
-  private initAOS(): void {
-    if (typeof AOS !== 'undefined') {
-      AOS.init({
-        duration: 900,
-        easing: 'ease-out-cubic',
-        once: false,
-        mirror: true,
-        offset: 80,
-      });
+  ngOnDestroy(): void {
+    clearInterval(this.testimonialInterval);
+    ScrollTrigger.getAll().forEach((t) => t.kill());
+  }
+
+  @HostListener('window:scroll')
+  onScroll(): void {
+    this.isScrolled = window.scrollY > 60;
+  }
+
+  toggleDark(): void {
+    this.darkMode = !this.darkMode;
+    this.applyDark();
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.setItem('xave-theme', this.darkMode ? 'dark' : 'light');
     }
   }
 
-  private initGSAP(): void {
-    if (typeof gsap === 'undefined') return;
-
-    if (typeof ScrollTrigger !== 'undefined') {
-      gsap.registerPlugin(ScrollTrigger);
+  private applyDark(): void {
+    if (this.darkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
     }
-
-    // Hero title — split par lettre
-    const titleEl = document.querySelector('.hero-title');
-    if (titleEl) {
-      const text = titleEl.textContent || '';
-      titleEl.innerHTML = text
-        .split('')
-        .map((char: string) =>
-          char === ' '
-            ? '<span class="char">&nbsp;</span>'
-            : `<span class="char">${char}</span>`
-        )
-        .join('');
-
-      gsap.fromTo(
-        '.hero-title .char',
-        { y: 120, opacity: 0, rotateX: -90 },
-        {
-          y: 0,
-          opacity: 1,
-          rotateX: 0,
-          duration: 0.8,
-          stagger: 0.04,
-          ease: 'back.out(1.7)',
-          delay: 0.3,
-        }
-      );
-    }
-
-    gsap.fromTo(
-      '.hero-subtitle',
-      { y: 40, opacity: 0 },
-      { y: 0, opacity: 1, duration: 1, delay: 1.2, ease: 'power3.out' }
-    );
-
-    gsap.fromTo(
-      '.hero-cta',
-      { y: 30, opacity: 0 },
-      { y: 0, opacity: 1, duration: 0.8, delay: 1.6, ease: 'power3.out' }
-    );
-
-    gsap.fromTo(
-      '.phone-mockup',
-      { x: 80, opacity: 0, rotate: 5 },
-      { x: 0, opacity: 1, rotate: 0, duration: 1.2, delay: 0.8, ease: 'power4.out' }
-    );
-
-    // Flottement infini du téléphone
-    gsap.to('.phone-mockup', {
-      y: -20,
-      duration: 3,
-      repeat: -1,
-      yoyo: true,
-      ease: 'sine.inOut',
-      delay: 2,
-    });
-
-    gsap.fromTo(
-      '.nav-logo',
-      { x: -30, opacity: 0 },
-      { x: 0, opacity: 1, duration: 0.8, ease: 'power3.out' }
-    );
-
-    gsap.fromTo(
-      '.nav-link',
-      { y: -20, opacity: 0 },
-      { y: 0, opacity: 1, duration: 0.6, stagger: 0.1, delay: 0.3, ease: 'power2.out' }
-    );
-
-    // Parallax orbs
-    if (typeof ScrollTrigger !== 'undefined') {
-      gsap.to('.orb-1', {
-        y: -100,
-        scrollTrigger: {
-          trigger: '.hero-section',
-          start: 'top top',
-          end: 'bottom top',
-          scrub: 1.5,
-        },
-      });
-
-      gsap.to('.orb-2', {
-        y: -60,
-        x: 40,
-        scrollTrigger: {
-          trigger: '.hero-section',
-          start: 'top top',
-          end: 'bottom top',
-          scrub: 2,
-        },
-      });
-    }
-  }
-
-  private initAnime(): void {
-    if (typeof anime === 'undefined') return;
-
-    // Ticker défilant
-    anime({
-      targets: '.ticker-track',
-      translateX: [0, '-50%'],
-      duration: 20000,
-      easing: 'linear',
-      loop: true,
-    });
-
-    // Points de grille animés
-    anime({
-      targets: '.grid-dot',
-      opacity: [0.1, 0.5],
-      scale: [1, 1.5],
-      duration: 2000,
-      delay: anime.stagger(100, { grid: [10, 10], from: 'center' }),
-      loop: true,
-      direction: 'alternate',
-      easing: 'easeInOutSine',
-    });
-
-    // Pulsation du bouton CTA
-    anime({
-      targets: '.cta-btn-primary',
-      boxShadow: [
-        '0 0 20px rgba(255,0,80,0.4)',
-        '0 0 40px rgba(255,0,80,0.8)',
-        '0 0 20px rgba(255,0,80,0.4)',
-      ],
-      duration: 2000,
-      loop: true,
-      easing: 'easeInOutSine',
-      delay: 2000,
-    });
-  }
-
-  private initCursor(): void {
-    const cursor = document.querySelector('.cursor') as HTMLElement;
-    const cursorDot = document.querySelector('.cursor-dot') as HTMLElement;
-    if (!cursor || !cursorDot || typeof gsap === 'undefined') return;
-
-    this.mouseMoveHandler = (e: MouseEvent) => {
-      gsap.to(cursor, { x: e.clientX, y: e.clientY, duration: 0.5, ease: 'power2.out' });
-      gsap.to(cursorDot, { x: e.clientX, y: e.clientY, duration: 0.1 });
-    };
-
-    document.addEventListener('mousemove', this.mouseMoveHandler);
-
-    const hoverEls = document.querySelectorAll('a, button, .service-card, .work-card');
-    hoverEls.forEach((el) => {
-      el.addEventListener('mouseenter', () => {
-        gsap.to(cursor, { scale: 2.5, opacity: 0.6, duration: 0.3 });
-        gsap.to(cursorDot, { scale: 0, duration: 0.3 });
-      });
-      el.addEventListener('mouseleave', () => {
-        gsap.to(cursor, { scale: 1, opacity: 1, duration: 0.3 });
-        gsap.to(cursorDot, { scale: 1, duration: 0.3 });
-      });
-    });
-  }
-
-  private initNavScroll(): void {
-    const nav = document.querySelector('.navbar') as HTMLElement;
-    if (!nav) return;
-
-    this.scrollHandler = () => {
-      if (window.scrollY > 60) {
-        nav.classList.add('scrolled');
-      } else {
-        nav.classList.remove('scrolled');
-      }
-    };
-    window.addEventListener('scroll', this.scrollHandler);
-  }
-
-  private initStatsObserver(): void {
-    const statsSection = document.querySelector('#stats');
-    if (!statsSection) return;
-
-    this.statsObserver = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting && !this.statsAnimated) {
-            this.statsAnimated = true;
-            this.animateCounters();
-          }
-        });
-      },
-      { threshold: 0.3 }
-    );
-    this.statsObserver.observe(statsSection);
-  }
-
-  private animateCounters(): void {
-    this.stats.forEach((stat, i) => {
-      const duration = 2000;
-      const steps = 60;
-      const increment = stat.value / steps;
-      let step = 0;
-
-      const timer = setInterval(() => {
-        step++;
-        const current = Math.min(Math.round(increment * step), stat.value);
-        this.stats[i] = { ...stat, current };
-
-        if (current >= stat.value) {
-          clearInterval(timer);
-        }
-      }, duration / steps);
-    });
   }
 
   toggleMenu(): void {
     this.menuOpen = !this.menuOpen;
-    if (typeof gsap !== 'undefined') {
-      if (this.menuOpen) {
-        gsap.fromTo('.mobile-menu', { x: '100%' }, { x: '0%', duration: 0.4, ease: 'power3.out' });
-      } else {
-        gsap.to('.mobile-menu', { x: '100%', duration: 0.3, ease: 'power3.in' });
-      }
-    }
   }
 
-  scrollTo(href: string): void {
-    const el = document.querySelector(href);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
-      this.menuOpen = false;
-    }
+  scrollTo(event: Event, id: string): void {
+    event.preventDefault();
+    this.menuOpen = false;
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
   }
 
-  // ✅ CORRIGÉ : MouseEvent au lieu de HTMLElement
-  onServiceHover(event: MouseEvent): void {
-    if (typeof anime === 'undefined') return;
-    const el = event.currentTarget as HTMLElement;
-    anime({ targets: el, translateY: -8, duration: 300, easing: 'easeOutCubic' });
+  setTestimonial(index: number): void {
+    this.activeTestimonial = index;
+    clearInterval(this.testimonialInterval);
+    this.testimonialInterval = setInterval(() => {
+      this.activeTestimonial = (this.activeTestimonial + 1) % this.testimonials.length;
+    }, 5000);
   }
 
-  onServiceLeave(event: MouseEvent): void {
-    if (typeof anime === 'undefined') return;
-    const el = event.currentTarget as HTMLElement;
-    anime({ targets: el, translateY: 0, duration: 300, easing: 'easeOutCubic' });
+  onSubmit(event: Event): void {
+    event.preventDefault();
   }
 
-  ngOnDestroy(): void {
-    if (this.isBrowser) {
-      if (this.mouseMoveHandler) document.removeEventListener('mousemove', this.mouseMoveHandler);
-      if (this.scrollHandler) window.removeEventListener('scroll', this.scrollHandler);
-      if (this.statsObserver) this.statsObserver.disconnect();
-    }
+  private initAnimations(): void {
+    // Hero staggered reveal
+    gsap.set('.reveal-line', { y: 60, opacity: 0 });
+    gsap.to('.reveal-line', {
+      y: 0,
+      opacity: 1,
+      duration: 1,
+      stagger: 0.14,
+      ease: 'power3.out',
+      delay: 0.25,
+    });
+
+    // Hero stats
+    gsap.from('.hero__stat-item', {
+      scrollTrigger: { trigger: '#hero', start: 'top top', end: '30% top', scrub: true },
+      y: 0,
+    });
+
+    // Fade scroll hint on scroll
+    gsap.to('.scroll-hint', {
+      scrollTrigger: { trigger: '#hero', start: 'top top', end: '25% top', scrub: true },
+      opacity: 0,
+      y: -16,
+    });
+
+    // Hero glow parallax
+    gsap.to('.hero-glow', {
+      scrollTrigger: { trigger: '#hero', start: 'top top', end: 'bottom top', scrub: true },
+      y: 180,
+      scale: 1.15,
+    });
+
+    // Section reveals via ScrollTrigger
+    const sections = ['#services', '#work', '#about', '#contact'];
+    sections.forEach((sel) => {
+      const el = document.querySelector(sel);
+      if (!el) return;
+      gsap.from(el.querySelectorAll('h2, p, article, form, .grid > *'), {
+        scrollTrigger: { trigger: el, start: 'top 82%' },
+        y: 48,
+        opacity: 0,
+        duration: 0.85,
+        stagger: 0.1,
+        ease: 'power2.out',
+      });
+    });
   }
 }
