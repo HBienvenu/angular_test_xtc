@@ -19,32 +19,36 @@
           href="#services"
           (click)="scrollTo($event, 'services')"
           class="text-sm text-[#6b6358] dark:text-[#b8b0a0] hover:text-[#1a1814] dark:hover:text-[#f0ead8] transition-colors duration-[250ms]"
-          >Services</a
         >
+          Services
+        </a>
       </li>
       <li>
         <a
           href="#work"
           (click)="scrollTo($event, 'work')"
           class="text-sm text-[#6b6358] dark:text-[#b8b0a0] hover:text-[#1a1814] dark:hover:text-[#f0ead8] transition-colors duration-[250ms]"
-          >Projets</a
         >
+          Projets
+        </a>
       </li>
       <li>
         <a
           href="#about"
           (click)="scrollTo($event, 'about')"
           class="text-sm text-[#6b6358] dark:text-[#b8b0a0] hover:text-[#1a1814] dark:hover:text-[#f0ead8] transition-colors duration-[250ms]"
-          >À propos</a
         >
+          À propos
+        </a>
       </li>
       <li>
         <a
           href="#contact"
           (click)="scrollTo($event, 'contact')"
           class="text-sm px-5 py-2 rounded border border-[#a07840]/40 dark:border-[#c9a96e]/30 text-[#a07840] dark:text-[#c9a96e] hover:bg-[#a07840] dark:hover:bg-[#c9a96e] hover:text-white dark:hover:text-[#070706] hover:border-[#a07840] dark:hover:border-[#c9a96e] transition-all duration-[250ms]"
-          >Démarrer</a
         >
+          Démarrer
+        </a>
       </li>
     </ul>
 
@@ -56,35 +60,37 @@
         class="w-9 h-9 flex items-center justify-center rounded-full border border-[#1a1814]/10 dark:border-[#f0ead8]/10 text-[#6b6358] dark:text-[#b8b0a0] hover:border-[#a07840]/40 dark:hover:border-[#c9a96e]/40 hover:text-[#a07840] dark:hover:text-[#c9a96e] transition-all duration-[250ms]"
         [attr.aria-label]="darkMode ? 'Mode clair' : 'Mode sombre'"
       >
-        <!-- Sun -->
-        <svg
-          *ngIf="darkMode"
-          width="15"
-          height="15"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.8"
-          stroke-linecap="round"
-        >
-          <circle cx="12" cy="12" r="5" />
-          <path
-            d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"
-          />
-        </svg>
-        <!-- Moon -->
-        <svg
-          *ngIf="!darkMode"
-          width="15"
-          height="15"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.8"
-          stroke-linecap="round"
-        >
-          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-        </svg>
+        <!-- Sun (dark mode actif) -->
+        @if (darkMode) {
+          <svg
+            width="15"
+            height="15"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+          >
+            <circle cx="12" cy="12" r="5" />
+            <path
+              d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"
+            />
+          </svg>
+        }
+        <!-- Moon (light mode actif) -->
+        @if (!darkMode) {
+          <svg
+            width="15"
+            height="15"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+          >
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+          </svg>
+        }
       </button>
 
       <!-- Burger (mobile only) -->
@@ -149,10 +155,8 @@
   id="hero"
   class="relative min-h-screen flex items-center px-8 overflow-hidden bg-[#faf8f2] dark:bg-[#070706]"
 >
-  <!-- Grain texture -->
   <div class="grain absolute inset-0 pointer-events-none opacity-[0.035]"></div>
 
-  <!-- Ambient glow -->
   <div
     class="hero-glow absolute -top-[10%] left-1/2 -translate-x-1/2 w-[700px] h-[700px] pointer-events-none"
     style="background: radial-gradient(circle, rgba(160, 120, 64, 0.07) 0%, transparent 70%)"
@@ -162,7 +166,6 @@
     style="background: radial-gradient(circle, rgba(201, 169, 110, 0.06) 0%, transparent 70%)"
   ></div>
 
-  <!-- Vertical decorative line -->
   <div
     class="hidden lg:block absolute left-[calc(50%-580px)] top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-[#a07840]/10 dark:via-[#c9a96e]/10 to-transparent"
   ></div>
@@ -226,18 +229,17 @@
 
   <!-- Stats desktop -->
   <div class="absolute right-8 bottom-12 hidden lg:flex flex-col gap-6 z-10">
-    <div
-      *ngFor="let stat of stats"
-      class="text-right pr-4 border-r-2 border-[#a07840] dark:border-[#c9a96e]"
-    >
-      <strong
-        class="block font-serif-display text-[2rem] font-semibold leading-none text-[#1a1814] dark:text-[#f0ead8]"
-        >{{ stat.value }}</strong
-      >
-      <span class="text-[0.7rem] tracking-[0.05em] text-[#6b6358] dark:text-[#b8b0a0]">{{
-        stat.label
-      }}</span>
-    </div>
+    @for (stat of stats; track stat.value) {
+      <div class="text-right pr-4 border-r-2 border-[#a07840] dark:border-[#c9a96e]">
+        <strong
+          class="block font-serif-display text-[2rem] font-semibold leading-none text-[#1a1814] dark:text-[#f0ead8]"
+          >{{ stat.value }}</strong
+        >
+        <span class="text-[0.7rem] tracking-[0.05em] text-[#6b6358] dark:text-[#b8b0a0]">{{
+          stat.label
+        }}</span>
+      </div>
+    }
   </div>
 
   <!-- Scroll hint -->
@@ -275,49 +277,106 @@
       </h2>
     </div>
 
-    <!-- Services grid -->
     <div
       class="grid grid-cols-1 md:grid-cols-3 gap-[1.5px] bg-[#1a1814]/[0.07] dark:bg-[#f0ead8]/[0.07] border border-[#1a1814]/[0.07] dark:border-[#f0ead8]/[0.07] rounded-xl overflow-hidden"
     >
-      <article
-        *ngFor="let service of services; let i = index"
-        class="group relative bg-[#ede8de] dark:bg-[#141412] p-10 overflow-hidden hover:bg-[#e5ddd1] dark:hover:bg-[#1a1917] transition-colors duration-300"
-      >
-        <!-- Hover bottom line -->
-        <div
-          class="service-underline absolute bottom-0 left-0 right-0 h-[2px] scale-x-0 group-hover:scale-x-100 transition-transform duration-[400ms] origin-center"
-          style="background: linear-gradient(90deg, transparent, #a07840, transparent)"
-        ></div>
-        <div
-          class="service-underline absolute bottom-0 left-0 right-0 h-[2px] scale-x-0 group-hover:scale-x-100 transition-transform duration-[400ms] origin-center hidden dark:block"
-          style="background: linear-gradient(90deg, transparent, #c9a96e, transparent)"
-        ></div>
-
-        <!-- Number watermark -->
-        <span
-          class="absolute top-6 right-6 font-serif-display text-5xl font-light leading-none select-none text-[#1a1814]/[0.07] dark:text-[#f0ead8]/[0.07] group-hover:text-[#a07840]/[0.12] dark:group-hover:text-[#c9a96e]/[0.12] transition-colors duration-300"
-          >0{{ i + 1 }}</span
+      @for (service of services; track service.title; let i = $index) {
+        <article
+          class="group relative bg-[#ede8de] dark:bg-[#141412] p-10 overflow-hidden hover:bg-[#e5ddd1] dark:hover:bg-[#1a1917] transition-colors duration-300"
         >
+          <!-- Hover bottom line -->
+          <div
+            class="absolute bottom-0 left-0 right-0 h-[2px] scale-x-0 group-hover:scale-x-100 transition-transform duration-[400ms] origin-center"
+            style="background: linear-gradient(90deg, transparent, #a07840, transparent)"
+          ></div>
+          <div
+            class="absolute bottom-0 left-0 right-0 h-[2px] scale-x-0 group-hover:scale-x-100 transition-transform duration-[400ms] origin-center hidden dark:block"
+            style="background: linear-gradient(90deg, transparent, #c9a96e, transparent)"
+          ></div>
 
-        <div class="text-[#a07840] dark:text-[#c9a96e] mb-6" [innerHTML]="service.icon"></div>
-
-        <h3 class="font-serif-display text-2xl font-medium mb-3 text-[#1a1814] dark:text-[#f0ead8]">
-          {{ service.title }}
-        </h3>
-
-        <p class="text-sm leading-[1.7] mb-6 text-[#6b6358] dark:text-[#b8b0a0]">
-          {{ service.description }}
-        </p>
-
-        <ul class="flex flex-wrap gap-2">
-          <li
-            *ngFor="let item of service.items"
-            class="text-[0.7rem] tracking-[0.04em] px-3 py-1 rounded-full border border-[#1a1814]/[0.1] dark:border-[#f0ead8]/[0.08] text-[#6b6358] dark:text-[#b8b0a0] group-hover:border-[#a07840]/30 dark:group-hover:border-[#c9a96e]/30 group-hover:text-[#1a1814] dark:group-hover:text-[#f0ead8] transition-all duration-[250ms]"
+          <!-- Number watermark -->
+          <span
+            class="absolute top-6 right-6 font-serif-display text-5xl font-light leading-none select-none text-[#1a1814]/[0.07] dark:text-[#f0ead8]/[0.07] group-hover:text-[#a07840]/[0.12] dark:group-hover:text-[#c9a96e]/[0.12] transition-colors duration-300"
+            >0{{ i + 1 }}</span
           >
-            {{ item }}
-          </li>
-        </ul>
-      </article>
+
+          <!-- ✅ SVG inline via @switch — aucun innerHTML, aucun warning -->
+          <div class="text-[#a07840] dark:text-[#c9a96e] mb-6">
+            @switch (i) {
+              @case (0) {
+                <!-- Stratégie : lignes de texte -->
+                <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                  <path
+                    d="M4 6h20M4 12h14M4 18h18M4 24h10"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                  />
+                </svg>
+              }
+              @case (1) {
+                <!-- Vidéo : caméra -->
+                <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                  <rect
+                    x="3"
+                    y="5"
+                    width="22"
+                    height="16"
+                    rx="2"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                  />
+                  <circle cx="14" cy="13" r="4" stroke="currentColor" stroke-width="1.8" />
+                  <path
+                    d="M10 23h8"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                  />
+                </svg>
+              }
+              @case (2) {
+                <!-- Réseaux : horloge / réseau -->
+                <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                  <circle cx="14" cy="14" r="10" stroke="currentColor" stroke-width="1.8" />
+                  <path
+                    d="M14 8v6l4 2"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                  />
+                  <path
+                    d="M7 20l3-2M21 20l-3-2"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                  />
+                </svg>
+              }
+            }
+          </div>
+
+          <h3
+            class="font-serif-display text-2xl font-medium mb-3 text-[#1a1814] dark:text-[#f0ead8]"
+          >
+            {{ service.title }}
+          </h3>
+
+          <p class="text-sm leading-[1.7] mb-6 text-[#6b6358] dark:text-[#b8b0a0]">
+            {{ service.description }}
+          </p>
+
+          <ul class="flex flex-wrap gap-2">
+            @for (item of service.items; track item) {
+              <li
+                class="text-[0.7rem] tracking-[0.04em] px-3 py-1 rounded-full border border-[#1a1814]/[0.1] dark:border-[#f0ead8]/[0.08] text-[#6b6358] dark:text-[#b8b0a0] group-hover:border-[#a07840]/30 dark:group-hover:border-[#c9a96e]/30 group-hover:text-[#1a1814] dark:group-hover:text-[#f0ead8] transition-all duration-[250ms]"
+              >
+                {{ item }}
+              </li>
+            }
+          </ul>
+        </article>
+      }
     </div>
   </div>
 </section>
@@ -343,67 +402,89 @@
     </div>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-      <article
-        *ngFor="let project of projects; let i = index"
-        class="group rounded-xl overflow-hidden cursor-pointer border border-[#1a1814]/[0.08] dark:border-[#f0ead8]/[0.08] hover:border-[#a07840]/40 dark:hover:border-[#c9a96e]/30 hover:-translate-y-1 transition-all duration-300"
-        [class.sm:col-span-2]="i === 0"
-      >
-        <!-- Visual -->
-        <div class="relative overflow-hidden" [style.height]="i === 0 ? '380px' : '240px'">
+      @for (project of projects; track project.title; let i = $index) {
+        <article
+          class="group rounded-xl overflow-hidden cursor-pointer border border-[#1a1814]/[0.08] dark:border-[#f0ead8]/[0.08] hover:border-[#a07840]/40 dark:hover:border-[#c9a96e]/30 hover:-translate-y-1 transition-all duration-300"
+          [class.sm:col-span-2]="i === 0"
+        >
+          <!-- ✅ Backgrounds statiques via @switch — pas de binding CSS dynamique -->
           <div
-            class="absolute inset-0 group-hover:scale-[1.04] transition-transform duration-500"
-            [style.background]="project.color"
-          ></div>
-          <div
-            class="absolute inset-0 opacity-20"
-            style="
-              background-image: repeating-linear-gradient(
-                45deg,
-                transparent,
-                transparent 20px,
-                rgba(255, 255, 255, 0.03) 20px,
-                rgba(255, 255, 255, 0.03) 21px
-              );
-            "
-          ></div>
-          <div
-            class="absolute inset-0 bg-black/0 group-hover:bg-black/15 transition-colors duration-300"
-          ></div>
-        </div>
+            class="relative overflow-hidden"
+            [class.h-[380px]]="i === 0"
+            [class.h-[240px]]="i !== 0"
+          >
+            @switch (i) {
+              @case (0) {
+                <div
+                  class="project-bg-0 absolute inset-0 group-hover:scale-[1.04] transition-transform duration-500"
+                ></div>
+              }
+              @case (1) {
+                <div
+                  class="project-bg-1 absolute inset-0 group-hover:scale-[1.04] transition-transform duration-500"
+                ></div>
+              }
+              @case (2) {
+                <div
+                  class="project-bg-2 absolute inset-0 group-hover:scale-[1.04] transition-transform duration-500"
+                ></div>
+              }
+              @case (3) {
+                <div
+                  class="project-bg-3 absolute inset-0 group-hover:scale-[1.04] transition-transform duration-500"
+                ></div>
+              }
+            }
+            <div
+              class="absolute inset-0 opacity-20"
+              style="
+                background-image: repeating-linear-gradient(
+                  45deg,
+                  transparent,
+                  transparent 20px,
+                  rgba(255, 255, 255, 0.03) 20px,
+                  rgba(255, 255, 255, 0.03) 21px
+                );
+              "
+            ></div>
+            <div
+              class="absolute inset-0 bg-black/0 group-hover:bg-black/15 transition-colors duration-300"
+            ></div>
+          </div>
 
-        <!-- Info -->
-        <div class="p-6 bg-[#ede8de] dark:bg-[#141412]">
-          <span
-            class="block text-[0.65rem] font-semibold tracking-[0.15em] uppercase mb-1 text-[#a07840] dark:text-[#c9a96e]"
-            >{{ project.category }}</span
-          >
-          <h3
-            class="font-serif-display text-[1.3rem] font-medium mb-3 text-[#1a1814] dark:text-[#f0ead8]"
-          >
-            {{ project.title }}
-          </h3>
-          <a
-            href="#"
-            class="inline-flex items-center gap-1.5 text-[0.8rem] group/lnk text-[#6b6358] dark:text-[#b8b0a0] hover:text-[#a07840] dark:hover:text-[#c9a96e] transition-colors duration-[250ms]"
-          >
-            Voir le projet
-            <svg
-              class="group-hover/lnk:translate-x-1 transition-transform duration-[250ms]"
-              width="13"
-              height="13"
-              viewBox="0 0 14 14"
-              fill="none"
+          <div class="p-6 bg-[#ede8de] dark:bg-[#141412]">
+            <span
+              class="block text-[0.65rem] font-semibold tracking-[0.15em] uppercase mb-1 text-[#a07840] dark:text-[#c9a96e]"
+              >{{ project.category }}</span
             >
-              <path
-                d="M2 7h10M8 3l4 4-4 4"
-                stroke="currentColor"
-                stroke-width="1.5"
-                stroke-linecap="round"
-              />
-            </svg>
-          </a>
-        </div>
-      </article>
+            <h3
+              class="font-serif-display text-[1.3rem] font-medium mb-3 text-[#1a1814] dark:text-[#f0ead8]"
+            >
+              {{ project.title }}
+            </h3>
+            <a
+              href="#"
+              class="inline-flex items-center gap-1.5 text-[0.8rem] group/lnk text-[#6b6358] dark:text-[#b8b0a0] hover:text-[#a07840] dark:hover:text-[#c9a96e] transition-colors duration-[250ms]"
+            >
+              Voir le projet
+              <svg
+                class="group-hover/lnk:translate-x-1 transition-transform duration-[250ms]"
+                width="13"
+                height="13"
+                viewBox="0 0 14 14"
+                fill="none"
+              >
+                <path
+                  d="M2 7h10M8 3l4 4-4 4"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </a>
+          </div>
+        </article>
+      }
     </div>
   </div>
 </section>
@@ -423,7 +504,6 @@
           class="absolute inset-0 rounded-xl border border-[#1a1814]/[0.08] dark:border-[#f0ead8]/[0.08]"
           style="background: linear-gradient(135deg, rgba(160, 120, 64, 0.06) 0%, transparent 60%)"
         ></div>
-        <!-- Offset frame -->
         <div
           class="absolute top-6 left-6 -right-6 -bottom-6 rounded-xl pointer-events-none border border-[#1a1814]/[0.05] dark:border-[#f0ead8]/[0.05]"
         ></div>
@@ -462,18 +542,22 @@
         </p>
 
         <ul class="flex flex-col gap-5 mb-10">
-          <li *ngFor="let val of values" class="flex items-start gap-4">
-            <span
-              class="mt-[7px] w-2 h-2 rounded-full shrink-0 bg-[#a07840] dark:bg-[#c9a96e]"
-            ></span>
-            <div>
-              <strong
-                class="block text-[0.9rem] font-semibold mb-1 text-[#1a1814] dark:text-[#f0ead8]"
-                >{{ val.title }}</strong
-              >
-              <span class="text-[0.825rem] text-[#6b6358] dark:text-[#b8b0a0]">{{ val.desc }}</span>
-            </div>
-          </li>
+          @for (val of values; track val.title) {
+            <li class="flex items-start gap-4">
+              <span
+                class="mt-[7px] w-2 h-2 rounded-full shrink-0 bg-[#a07840] dark:bg-[#c9a96e]"
+              ></span>
+              <div>
+                <strong
+                  class="block text-[0.9rem] font-semibold mb-1 text-[#1a1814] dark:text-[#f0ead8]"
+                  >{{ val.title }}</strong
+                >
+                <span class="text-[0.825rem] text-[#6b6358] dark:text-[#b8b0a0]">{{
+                  val.desc
+                }}</span>
+              </div>
+            </li>
+          }
         </ul>
 
         <a
@@ -509,45 +593,47 @@
 <section class="py-28 text-center overflow-hidden bg-[#faf8f2] dark:bg-[#070706]">
   <div class="max-w-[1200px] mx-auto px-8">
     <div class="relative min-h-[200px] mb-8">
-      <div
-        *ngFor="let t of testimonials; let i = index"
-        class="flex flex-col items-center transition-all duration-500"
-        [class.absolute]="activeTestimonial !== i"
-        [class.inset-0]="activeTestimonial !== i"
-        [class.opacity-0]="activeTestimonial !== i"
-        [class.translate-y-3]="activeTestimonial !== i"
-        [class.pointer-events-none]="activeTestimonial !== i"
-      >
-        <blockquote
-          class="font-serif-display italic font-light leading-[1.6] max-w-[700px] mx-auto mb-6 text-[#1a1814] dark:text-[#f0ead8]"
-          style="font-size: clamp(1.1rem, 2.5vw, 1.5rem)"
+      @for (t of testimonials; track t.name; let i = $index) {
+        <div
+          class="flex flex-col items-center transition-all duration-500"
+          [class.absolute]="activeTestimonial !== i"
+          [class.inset-0]="activeTestimonial !== i"
+          [class.opacity-0]="activeTestimonial !== i"
+          [class.translate-y-3]="activeTestimonial !== i"
+          [class.pointer-events-none]="activeTestimonial !== i"
         >
-          {{ t.quote }}
-        </blockquote>
+          <blockquote
+            class="font-serif-display italic font-light leading-[1.6] max-w-[700px] mx-auto mb-6 text-[#1a1814] dark:text-[#f0ead8]"
+            style="font-size: clamp(1.1rem, 2.5vw, 1.5rem)"
+          >
+            {{ t.quote }}
+          </blockquote>
 
-        <cite class="not-italic">
-          <strong class="block text-sm font-semibold text-[#a07840] dark:text-[#c9a96e]">{{
-            t.name
-          }}</strong>
-          <span class="text-[0.775rem] text-[#6b6358] dark:text-[#b8b0a0]">{{ t.role }}</span>
-        </cite>
-      </div>
+          <cite class="not-italic">
+            <strong class="block text-sm font-semibold text-[#a07840] dark:text-[#c9a96e]">{{
+              t.name
+            }}</strong>
+            <span class="text-[0.775rem] text-[#6b6358] dark:text-[#b8b0a0]">{{ t.role }}</span>
+          </cite>
+        </div>
+      }
     </div>
 
     <!-- Pill dots -->
     <div class="flex justify-center gap-2">
-      <button
-        *ngFor="let t of testimonials; let i = index"
-        (click)="setTestimonial(i)"
-        class="h-[6px] rounded-full transition-all duration-300"
-        [class.w-5]="activeTestimonial === i"
-        [class.w-[6px]]="activeTestimonial !== i"
-        [class.bg-[#a07840]]="activeTestimonial === i"
-        [class.dark:bg-[#c9a96e]]="activeTestimonial === i"
-        [class.bg-[#1a1814]/20]="activeTestimonial !== i"
-        [class.dark:bg-[#f0ead8]/20]="activeTestimonial !== i"
-        [attr.aria-label]="'Témoignage ' + (i + 1)"
-      ></button>
+      @for (t of testimonials; track t.name; let i = $index) {
+        <button
+          (click)="setTestimonial(i)"
+          class="h-[6px] rounded-full transition-all duration-300"
+          [class.w-5]="activeTestimonial === i"
+          [class.w-[6px]]="activeTestimonial !== i"
+          [class.bg-[#a07840]]="activeTestimonial === i"
+          [class.dark:bg-[#c9a96e]]="activeTestimonial === i"
+          [class.bg-[#1a1814]/20]="activeTestimonial !== i"
+          [class.dark:bg-[#f0ead8]/20]="activeTestimonial !== i"
+          [attr.aria-label]="'Témoignage ' + (i + 1)"
+        ></button>
+      }
     </div>
   </div>
 </section>
@@ -559,7 +645,6 @@
   id="contact"
   class="relative overflow-hidden py-32 px-8 bg-[#f2ede4] dark:bg-[#0f0f0d] border-y border-[#1a1814]/[0.08] dark:border-[#f0ead8]/[0.08]"
 >
-  <!-- Glow -->
   <div
     class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] pointer-events-none"
     style="background: radial-gradient(circle, rgba(160, 120, 64, 0.06) 0%, transparent 70%)"
@@ -648,7 +733,6 @@
   <div
     class="max-w-[1200px] mx-auto px-8 grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-16 pb-12 mb-8 border-b border-[#1a1814]/[0.08] dark:border-[#f0ead8]/[0.08]"
   >
-    <!-- Brand -->
     <div>
       <a
         href="#"
@@ -662,24 +746,27 @@
       </p>
     </div>
 
-    <!-- Link columns -->
     <div class="grid grid-cols-2 sm:grid-cols-3 gap-8">
-      <div *ngFor="let col of footerCols">
-        <h4
-          class="text-[0.7rem] font-semibold tracking-[0.15em] uppercase mb-4 text-[#a07840] dark:text-[#c9a96e]"
-        >
-          {{ col.title }}
-        </h4>
-        <ul class="flex flex-col gap-[0.6rem]">
-          <li *ngFor="let link of col.links">
-            <a
-              href="#"
-              class="text-[0.825rem] text-[#6b6358] dark:text-[#b8b0a0] hover:text-[#1a1814] dark:hover:text-[#f0ead8] transition-colors duration-200"
-              >{{ link }}</a
-            >
-          </li>
-        </ul>
-      </div>
+      @for (col of footerCols; track col.title) {
+        <div>
+          <h4
+            class="text-[0.7rem] font-semibold tracking-[0.15em] uppercase mb-4 text-[#a07840] dark:text-[#c9a96e]"
+          >
+            {{ col.title }}
+          </h4>
+          <ul class="flex flex-col gap-[0.6rem]">
+            @for (link of col.links; track link) {
+              <li>
+                <a
+                  href="#"
+                  class="text-[0.825rem] text-[#6b6358] dark:text-[#b8b0a0] hover:text-[#1a1814] dark:hover:text-[#f0ead8] transition-colors duration-200"
+                  >{{ link }}</a
+                >
+              </li>
+            }
+          </ul>
+        </div>
+      }
     </div>
   </div>
 

@@ -6,7 +6,7 @@
    - Grain texture
    - Nav scrolled state
    - Burger transforms
-   - GSAP initial states
+   - Project card backgrounds (évite la sanitization CSS d'Angular)
    ============================================= */
 
 /* --- FONTS --- */
@@ -36,6 +36,7 @@
 /* --- Scroll line animation --- */
 .scroll-line {
     animation: scrollLine 2s ease-in-out infinite;
+    transform-origin: top;
 }
 
 @keyframes scrollLine {
@@ -44,13 +45,11 @@
     100% {
         opacity: 0;
         transform: scaleY(0);
-        transform-origin: top;
     }
 
     50% {
         opacity: 1;
         transform: scaleY(1);
-        transform-origin: top;
     }
 }
 
@@ -68,12 +67,24 @@
     transform: translateY(-6.5px) rotate(-45deg);
 }
 
-/* --- GSAP reveal initial state (set via JS, but prevent FOUC) --- */
+/* --- GSAP reveal --- */
 .reveal-line {
     will-change: transform, opacity;
 }
 
-/* --- Service card hover underline (pseudo-element can't be done in Tailwind) --- */
-.service-underline {
-    pointer-events: none;
+/* --- Project card backgrounds (static = pas de sanitization Angular) --- */
+.project-bg-0 {
+    background: linear-gradient(135deg, #1a1208 0%, #3d2a0e 100%);
+}
+
+.project-bg-1 {
+    background: linear-gradient(135deg, #080c1a 0%, #0e1f3d 100%);
+}
+
+.project-bg-2 {
+    background: linear-gradient(135deg, #0a130a 0%, #1a2e1a 100%);
+}
+
+.project-bg-3 {
+    background: linear-gradient(135deg, #13080d 0%, #2e0e1d 100%);
 }
